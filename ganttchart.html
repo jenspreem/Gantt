@@ -1,8 +1,19 @@
 <!DOCTYPE html>
 <html>
 <head>
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
+  
+  <script>
+  $(document).ready(function() {
+    $(".datepicker").datepicker();
+  });
+  </script>
+
+
 <script>
-function showUser(str) 
+   function showUser(str) 
 {
   if (str=="") {
     document.getElementById("txtHint").innerHTML='<b>No activity selected</b>';
@@ -17,6 +28,7 @@ function showUser(str)
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("txtHint").innerHTML=this.responseText;
+      $( ".datepicker" ).datepicker();
     }
   }
   xmlhttp.open("GET","getchart.php?q="+str,true);
@@ -37,6 +49,8 @@ function showUser(str)
 
 </select>
 </form>
+
+
 <br>
 <div id="txtHint"><b>Gantt table information will be listed here</b></div>
 

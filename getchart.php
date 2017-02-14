@@ -1,6 +1,9 @@
 <!DOCTYPE html>
 <html>
 <head>
+
+
+
 <style>
 table {
     width: 100%;
@@ -34,6 +37,9 @@ float:left;
 
 
 </style>
+
+
+
 </head>
 <body>
 
@@ -123,14 +129,13 @@ mysqli_close($con);
 <form action="action_page.php">
   <input type="text" value="Task" size="12">
 <input type="text" value="Responsible" size="12">
-<input type="text" value="StartDate">
-<input type="text" value="EndDate">
+<input type="text" value="StartDate" class="datepicker">
+<input type="text" value="EndDate" class="datepicker">
 <input type="submit" value="Create">
 </form>
 </td>
 </tr>
 </table>
-
 
 
 </body>
