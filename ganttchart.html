@@ -1,17 +1,22 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- resources needed for jq datepicker -->
+
+
+
+
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
   
-  <script>
-  $(document).ready(function() {
-    $(".datepicker").datepicker();
+<script>
+$(document).ready(function() {
+ $(".datepicker").datepicker();
   });
-  </script>
+</script>
 
-
+<!-- script to retrieve ganttchart -->
 <script>
    function showUser(str) 
 {
@@ -34,10 +39,58 @@
   xmlhttp.open("GET","getchart.php?q="+str,true);
   xmlhttp.send();
 }
+</script>
+<!-- script to add new task to opened chart -->
+
+<script>
+   function addTask() 
+{
+  var Tname = document.forms["NewEntry"]["TaskInput"].value;
+  var Tresp = document.forms["NewEntry"]["RespInput"].value;
+  var STDate = document.forms["NewEntry"]["StartInput"].value;
+  var ENDate = document.forms["NewEntry"]["EndInput"].value;
+  if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
+  {
+    document.getElementById("Warning").innerHTML='<b>Fill all fields!</b>';
+    document.forms["NewEntry"].reset();
+    return;
+
+  }
+
+  if (window.XMLHttpRequest)
+ {
+    // code for IE7+, Firefox, Chrome, Opera, Safari
+    xmlhttp2=new XMLHttpRequest();
+ }   else 
+     { // code for IE6, IE5
+     xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
+     }
+
+ xmlhttp2.onreadystatechange=function() {
+    if (this.readyState==4 && this.status==200) {
+      document.getElementById("txtHint").innerHTML=this.responseText;
+      $( ".datepicker" ).datepicker();
+    }
+  }
 
 
+xmlhttp.open( "POST", "insert_task.php", true );
+
+
+
+xmlhttp.send( "task="+encodeURIComponent(Tname)+
+              "&person="+encodeURIComponent(Tresp)+
+              "&start="+encodeURIComponent(STDate)+
+              "&end="+encodeURIComponent(ENDate) );  
+
+
+
+
+}
 
 </script>
+
+
 </head>
 <body>
 
@@ -53,6 +106,7 @@
 
 <br>
 <div id="txtHint"><b>Gantt table information will be listed here</b></div>
+<div id="Warning"><b></b></div>
 
 </body>
 </html>

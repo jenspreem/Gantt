@@ -126,12 +126,12 @@ mysqli_close($con);
 
 <tr>
 <td colspan="6"> 
-<form action="action_page.php">
-  <input type="text" value="Task" size="12">
-<input type="text" value="Responsible" size="12">
-<input type="text" value="StartDate" class="datepicker">
-<input type="text" value="EndDate" class="datepicker">
-<input type="submit" value="Create">
+<form name="NewEntry" >
+  <input type="text" name="TaskInput" placeholder="Task" size="12">
+<input type="text" name="RespInput" placeholder="Person" size="12">
+<input type="text" name="StartInput" placeholder="StartDate"class="datepicker">
+<input type="text" name="EndInput" placeholder="EndDate" class="datepicker">
+<input type="button" value="Create" onclick="addTask()">
 </form>
 </td>
 </tr>
