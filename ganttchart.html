@@ -21,7 +21,7 @@ $(document).ready(function() {
    function showUser(str) 
 {
   if (str=="") {
-    document.getElementById("txtHint").innerHTML='<b>No activity selected</b>';
+    document.getElementById("ChartArea").innerHTML='<b>No activity selected</b>';
     return;
   }
   if (window.XMLHttpRequest) {
@@ -32,7 +32,7 @@ $(document).ready(function() {
   }
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      document.getElementById("txtHint").innerHTML=this.responseText;
+      document.getElementById("ChartArea").innerHTML=this.responseText;
       $( ".datepicker" ).datepicker();
     }
   }
@@ -40,8 +40,9 @@ $(document).ready(function() {
   xmlhttp.send();
 }
 </script>
-<!-- script to add new task to opened chart -->
 
+
+<!-- script to add new task to opened chart -->
 <script>
    function addTask() 
 {
@@ -51,7 +52,7 @@ $(document).ready(function() {
   var ENDate = document.forms["NewEntry"]["EndInput"].value;
   if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
   {
-    document.getElementById("Warning").innerHTML='<b>Fill all fields!</b>';
+    document.getElementById("WarningArea").innerHTML='<b>Fill all fields!</b>';
     document.forms["NewEntry"].reset();
     return;
 
@@ -68,7 +69,7 @@ $(document).ready(function() {
 
  xmlhttp2.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
-      document.getElementById("txtHint").innerHTML=this.responseText;
+      document.getElementById("WarningArea").innerHTML=this.responseText;
       $( ".datepicker" ).datepicker();
     }
   }
@@ -88,6 +89,7 @@ xmlhttp2.send( "task="+encodeURIComponent(Tname)+
 
 }
 
+
 </script>
 
 
@@ -105,8 +107,8 @@ xmlhttp2.send( "task="+encodeURIComponent(Tname)+
 
 
 <br>
-<div id="txtHint"><b>Gantt table information will be listed here</b></div>
-<div id="Warning"><b></b></div>
+<div id="ChartArea"><b>Gantt table information will be listed here</b></div>
+<div id="WarningArea"><b></b></div>
 
 </body>
 </html>
