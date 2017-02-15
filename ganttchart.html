@@ -74,11 +74,11 @@ $(document).ready(function() {
   }
 
 
-xmlhttp.open( "POST", "insert_task.php", true );
+xmlhttp2.open( "POST", "insert_task.php", true );
+xmlhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 
 
-
-xmlhttp.send( "task="+encodeURIComponent(Tname)+
+xmlhttp2.send( "task="+encodeURIComponent(Tname)+
               "&person="+encodeURIComponent(Tresp)+
               "&start="+encodeURIComponent(STDate)+
               "&end="+encodeURIComponent(ENDate) );  
