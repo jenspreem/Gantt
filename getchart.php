@@ -1,38 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
-
-<style>
-table {
-    width: 100%;
-    border-collapse: collapse;
-    display: block;
-    overflow-x: auto;
-
-
-}
-
-table, td, th {
-    border: 1px solid black;
-    padding: 5px;
-
-
-}
-
-th {text-align: left;}
-
-.bgtd {
-   
-    background-color: red;
-   
-}
-
-input {
- display:inline;
-float:left;
-    margin:5px;   
-}
-</style>
+<link rel="stylesheet" type="text/css" href="chartstyle.css">
 </head>
 
 <body>
@@ -110,9 +79,9 @@ echo "</tr>";
 
 mysqli_close($con);
 ?>
-<!-- before closing the table Ill add a row containing the form for adding new tasks -->
-</table>
 
+</table>
+<!-- after creating  the table I'll also create the form for adding new tasks into it -->
 <form name="NewEntry" >
   <input type="text" name="TaskInput" placeholder="Task" size="12">
 <input type="text" name="RespInput" placeholder="Person" size="12">

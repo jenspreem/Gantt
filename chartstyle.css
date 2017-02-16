@@ -1,0 +1,30 @@
+table {
+    width: 100%;
+    border-collapse: collapse;
+    display: block;
+    overflow-x: auto;
+
+
+}
+
+table, td, th {
+    border: 1px solid black;
+    padding: 5px;
+
+
+}
+
+th {text-align: left;}
+
+.bgtd {
+   
+    background-color: red;
+   
+}
+
+input {
+ display:inline;
+float:left;
+    margin:5px;   
+}
+
