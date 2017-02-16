@@ -2,8 +2,6 @@
 <html>
 <head>
 
-
-
 <style>
 table {
     width: 100%;
@@ -34,13 +32,9 @@ input {
 float:left;
     margin:5px;   
 }
-
-
 </style>
-
-
-
 </head>
+
 <body>
 
 <!-- Create the table to house my ganttable -->

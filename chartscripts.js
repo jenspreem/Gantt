@@ -14,6 +14,7 @@ function showChart(str)
   xmlhttp.onreadystatechange=function() {
     if (this.readyState==4 && this.status==200) {
       document.getElementById("ChartArea").innerHTML=this.responseText;
+
 //you need the datepicker also in this newly created element
       $( ".datepicker" ).datepicker();
     }
@@ -56,7 +57,13 @@ function addTask()
      var cell2 = row.insertCell(-1);
      cell1.innerHTML = Tname;
      cell2.innerHTML = Tresp;
+     var projstart = document.getElementById("ganttable").rows[0].cells[2].innerHTML;
+     var num = table.rows[0].cells.length;
+     var projend = document.getElementById("ganttable").rows[0].cells[num-1].innerHTML;
 //so how to add colored cells for dates?
+//test 
+     calcRow(row);
+     
 
     }
   }
@@ -73,19 +80,36 @@ function addTask()
 
 
 
-function calcRow() 
+function calcRow(r) 
 {
-//get first rows first and last cells they contain the project start and end-dates 
+var redcell = r.insertCell(-1);
+redcell.className = 'bgtd';
 
-     var projstart = document.getElementById("ganttable").rows[0].cells[3].innerHTML;
-     var projend = document.getElementById("ganttable").rows[0].cells[-1].innerHTML;
-//todo --- you should also set a check that you can-not easily add tasks that are bigger than the projects critical path?
+/*
+  var startind=3;
+//DifferenceinDays(Date.parse(p1),Date.parse(t1));
+  var endind=5;
+//DifferenceinDays(Date.parse(p2),Date.parse(t2));
+  var i;
 
-//todo find the indexes for colored cells
 
-//todo construct row
-
+  for(i=0;i<28);i++)
+  {
+    if (i<endind && i>startind)
+    {
+     var redcell = r.insertCell(-1);
+     cell1.className = 'bgtd';
+    } 
+    else 
+    {
+     r.insertCell(-1);
+    }
+  }
+*/
 }
+
+
+
 
 function DifferenceInDays(firstDate, secondDate)
 {
