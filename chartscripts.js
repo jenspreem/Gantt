@@ -15,7 +15,7 @@ function showChart(str)
     if (this.readyState==4 && this.status==200) {
       document.getElementById("ChartArea").innerHTML=this.responseText;
 
-//you need the datepicker also in this newly created element
+//you need the datepicker also inside this newly created element
       $( ".datepicker" ).datepicker();
     }
   }
@@ -49,8 +49,8 @@ function addTask()
   {
     if (this.readyState==4 && this.status==200) 
    {
-      document.getElementById("WarningArea").innerHTML=this.responseText;
-
+     document.getElementById("WarningArea").innerHTML=this.responseText;
+//add new row  update our local html page
      var table = document.getElementById("ganttable");
      var row = table.insertRow(-1);
      var cell1 = row.insertCell(-1);
@@ -60,14 +60,12 @@ function addTask()
      var projstart = document.getElementById("ganttable").rows[0].cells[2].innerHTML;
      var num = table.rows[0].cells.length;
      var projend = document.getElementById("ganttable").rows[0].cells[num-1].innerHTML;
-//so how to add colored cells for dates?
-//test 
-     calcRow(row);
-     
+//add colored cells
+     calcRow(row,projstart,STDate,ENDate,num);    
 
     }
   }
-
+//send the info to php script to update database with new row
   xmlhttp2.open( "POST", "insert_task.php", true );
   xmlhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
   xmlhttp2.send( "task="+encodeURIComponent(Tname)+
@@ -80,34 +78,25 @@ function addTask()
 
 
 
-function calcRow(r) 
+function calcRow(r,p1,t1,t2,n) 
 {
-var redcell = r.insertCell(-1);
-redcell.className = 'bgtd';
-
-/*
-  var startind=3;
-//DifferenceinDays(Date.parse(p1),Date.parse(t1));
-  var endind=5;
-//DifferenceinDays(Date.parse(p2),Date.parse(t2));
-  var i;
-
-
-  for(i=0;i<28);i++)
-  {
-    if (i<endind && i>startind)
+//todo what to do when added dates are larger or smaller than the project end or start 
+ var startind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t1)));
+ var endind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t2)));
+ for(i=0;i<n;i++)
+ {
+    if (i<=endind && i>=startind)
     {
      var redcell = r.insertCell(-1);
-     cell1.className = 'bgtd';
+     redcell.className = 'bgtd';
     } 
     else 
     {
-     r.insertCell(-1);
+     r.insertCell();
     }
   }
-*/
-}
 
+}
 
 
 
