@@ -1,137 +1,25 @@
 <!DOCTYPE html>
 <html>
 <head>
-<!-- resources needed for jq datepicker -->
-
-
-
-
+<!-- resources for datepicker -->
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
-<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>
-  
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>  
+<!-- add datepicker when doc ready -->
 <script>
 $(document).ready(function() {
  $(".datepicker").datepicker();
   });
 </script>
-
-<!-- script to retrieve ganttchart -->
-<script>
-   function showUser(str) 
-{
-  if (str=="") {
-    document.getElementById("ChartArea").innerHTML='<b>No activity selected</b>';
-    return;
-  }
-  if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-  } else { // code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  xmlhttp.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      document.getElementById("ChartArea").innerHTML=this.responseText;
-      $( ".datepicker" ).datepicker();
-    }
-  }
-  xmlhttp.open("GET","getchart.php?q="+str,true);
-  xmlhttp.send();
-}
-</script>
-
-
-<!-- script to add new task to opened chart -->
-<script>
-   function addTask() 
-{
-  var Tname = document.forms["NewEntry"]["TaskInput"].value;
-  var Tresp = document.forms["NewEntry"]["RespInput"].value;
-  var STDate = document.forms["NewEntry"]["StartInput"].value;
-  var ENDate = document.forms["NewEntry"]["EndInput"].value;
-  if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
-  {
-    document.getElementById("WarningArea").innerHTML='<b>Fill all fields!</b>';
-    document.forms["NewEntry"].reset();
-    return;
-
-  }
-
-  if (window.XMLHttpRequest)
- {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp2=new XMLHttpRequest();
- }   else 
-     { // code for IE6, IE5
-     xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
-     }
-
- xmlhttp2.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      document.getElementById("WarningArea").innerHTML=this.responseText;
-
-     var table = document.getElementById("ganttable");
-     var row = table.insertRow(-1);
-     var cell1 = row.insertCell(-1);
-     var cell2 = row.insertCell(-1);
-     cell1.innerHTML = Tname;
-     cell2.innerHTML = Tresp;
-//so how to add colored cells for dates?
-
-
-
-
-
-
-
-
-
-
-    }
-  }
-
-
-xmlhttp2.open( "POST", "insert_task.php", true );
-xmlhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-
-xmlhttp2.send( "task="+encodeURIComponent(Tname)+
-              "&person="+encodeURIComponent(Tresp)+
-              "&start="+encodeURIComponent(STDate)+
-              "&end="+encodeURIComponent(ENDate) );  
-
-
-
-}
-
-
-</script>
-
-<!-- script to calculate added new row html locally -->
-<script>
-   function calcRow() 
-{
-//get first rows first and last cells they contain the project start and end-dates 
-
-     var projstart = document.getElementById("ganttable").rows[0].cells[0];
-     var projend = document.getElementById("ganttable").rows[0].cells[-1];
-//todo --- you should also set a check that you can-not easily add tasks that are bigger than the projects critical path?
-
-//todo find the indexes for colored cells
-
-//todo construct row
-
-}
-</script>
-
+<!-- scripts to manipulate chart area -->
+<script src="chartscripts.js"> </script>
 
 
 </head>
 <body>
 
 <form>
-<select name="charts" onchange="showUser(this.value)">
+<select name="charts" onchange="showChart(this.value)">
 <option value="">Select chart:</option>
 <option value="1">GanttappCreationChart</option>
 
