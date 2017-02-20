@@ -73,8 +73,8 @@ EOL;
     }
 
 }
-
-
+#maybe add an invisible cell containing task-id, useful for your javascript 
+echo '<td style="display:none;">'.$row[0].'</td>';
 echo "</tr>";
 }
 

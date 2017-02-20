@@ -23,9 +23,36 @@ function showChart(str)
   xmlhttp.send();
 }
 
+
+
 function remTask(x) 
 {
  document.getElementById("ganttable").deleteRow(x.parentElement.rowIndex);
+
+
+ if (window.XMLHttpRequest)
+  {
+    xmlhttp=new XMLHttpRequest();
+  }   else 
+     { 
+     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+     }
+
+  xmlhttp.onreadystatechange=function() 
+  {
+     if (this.readyState==4 && this.status==200) 
+     {
+     document.getElementById("WarningArea").innerHTML=this.responseText;
+     }
+  }
+ var num = document.getElementById("ganttable").rows[1].cells.length;
+ var taskid = document.getElementById("ganttable").rows[(x.parentElement.rowIndex)].cells[num-1];
+ xmlhttp.open( "POST", "remove_task.php", true );
+ xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+ xmlhttp.send( "taskid="+encodeURIComponent(taskid));  
+
+
+
 }
 
 
@@ -62,13 +89,37 @@ function addTask()
      var row = table.insertRow(-1);
      var cell1 = row.insertCell(-1);
      var cell2 = row.insertCell(-1);
-     cell1.innerHTML = Tname;
-     cell2.innerHTML = Tresp;
-     var projstart = document.getElementById("ganttable").rows[0].cells[2].innerHTML;
+     var cell3 = row.insertCell(-1);
+     cell1.innerHTML= "X";
+     var toolspan = document.createElement("SPAN"); 
+	 toolspan.innerHTML="click to delete task";
+ 	 toolspan.className="deletetext";
+     cell1.className = "tooltip";
+
+
+
+
+	cell1.addEventListener( 'click', function(){
+	remTask(cell1);
+	
+	} );
+
+
+
+
+     cell1.appendChild(toolspan);
+
+     cell2.innerHTML = Tname;
+     cell3.innerHTML = Tresp;
+     var projstart = document.getElementById("ganttable").rows[0].cells[3].innerHTML;
      var num = table.rows[0].cells.length;
      var projend = document.getElementById("ganttable").rows[0].cells[num-1].innerHTML;
 //add colored cells
      calcRow(row,projstart,STDate,ENDate,num);    
+
+//add invisible cell containing taskid
+	var cell4 = row.insertCell(-1);
+	cell4.style.display = "none";
 
     }
   }
@@ -90,7 +141,7 @@ function calcRow(r,p1,t1,t2,n)
 //todo what to do when added dates are larger or smaller than the project end or start 
  var startind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t1)));
  var endind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t2)));
- for(i=0;i<n;i++)
+ for(i=0;i<n-3;i++)
  {
     if (i<=endind && i>=startind)
     {
