@@ -23,6 +23,13 @@ function showChart(str)
   xmlhttp.send();
 }
 
+function remTask(x) 
+{
+ document.getElementById("ganttable").deleteRow(x.parentElement.rowIndex);
+}
+
+
+
 function addTask() 
 {
 

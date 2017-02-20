@@ -9,6 +9,7 @@
 <!-- Create the table to house my ganttable -->
 <table id="ganttable">
 <tr>
+<th></th>
 <th>Activity</th>
 <th>Responsible</th>
 
@@ -57,6 +58,7 @@ echo "</tr>";
 #next print rows for different tasks
 foreach($result as $row) {
 echo "<tr>";
+echo '<td class="tooltip" onclick="remTask(this)"> X <span class="deletetext">click to delete task</span></td>';
 echo "<td>" . $row[1] . "</td>";
 echo "<td>" . $row[2] . "</td>";
 
