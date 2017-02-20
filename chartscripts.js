@@ -27,29 +27,38 @@ function showChart(str)
 
 function remTask(x) 
 {
- document.getElementById("ganttable").deleteRow(x.parentElement.rowIndex);
-
+ var myrow=x.parentElement.rowIndex;
+ var num = document.getElementById("ganttable").rows[1].cells.length;
+ var tasknr = document.getElementById("ganttable").rows[myrow].cells[num].innerHTML;
 
  if (window.XMLHttpRequest)
   {
-    xmlhttp=new XMLHttpRequest();
+    xmlhttpR=new XMLHttpRequest();
   }   else 
      { 
-     xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
+     xmlhttpR=new ActiveXObject("Microsoft.XMLHTTP");
      }
 
-  xmlhttp.onreadystatechange=function() 
+  xmlhttpR.onreadystatechange=function() 
   {
      if (this.readyState==4 && this.status==200) 
      {
      document.getElementById("WarningArea").innerHTML=this.responseText;
+     document.getElementById("ganttable").deleteRow(myrow);  
      }
   }
- var num = document.getElementById("ganttable").rows[1].cells.length;
- var taskid = document.getElementById("ganttable").rows[(x.parentElement.rowIndex)].cells[num-1];
- xmlhttp.open( "POST", "remove_task.php", true );
- xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- xmlhttp.send( "taskid="+encodeURIComponent(taskid));  
+
+ //why does tasknr stay undefined? 
+// var tasknr = document.getElementById("ganttable").rows[myrow].cells[num].innerHTML;
+ //var tasknr = document.getElementById("ganttable").rows[7].cells[33].innerHTML;
+//var tasknr =135;
+
+ xmlhttpR.open( "POST", "remove_task.php", true );
+ xmlhttpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+ xmlhttpR.send( "taskid="+encodeURIComponent(tasknr));
+
+
+
 
 
 
