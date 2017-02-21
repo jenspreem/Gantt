@@ -61,8 +61,20 @@ function remTask(x)
 
 }
 
-function modTask()
+function modTask(x)
 {
+//need these later for php
+ var myrow=x.parentElement.rowIndex;
+ var num = document.getElementById("ganttable").rows[1].cells.length;
+ var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
+//rightnow just test popupbox
+ updatebox = document.createElement("div");
+ updatebox.className = 'updatebox';
+ x.appendChild(updatebox);
+
+
+
+
 
 }
 

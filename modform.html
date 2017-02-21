@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+<title>Popup  form</title>
+<link rel="stylesheet" type="text/css" href="chartstyle.css">
+<!-- resources for datepicker -->
+<link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>  
+<!-- add datepicker when doc ready -->
+<script>
+$(document).ready(function() {
+ $(".datepicker").datepicker();
+  });
+</script>
+<!-- scripts to manipulate chart area -->
+<script src="chartscripts.js"> </script>
+</head>
+
+
+<body>
+
+<form name="UpdateForm" >
+<input type="text" name="TaskInput" placeholder="Task" size="12">
+<input type="text" name="RespInput" placeholder="Person" size="12">
+<input type="text" name="StartInput" placeholder="StartDate"class="datepicker">
+<input type="text" name="EndInput" placeholder="EndDate" class="datepicker">
+<input type="button" value="Create" onclick="updateTask()">
+</form>
+
+
+
+</body>
+</html>

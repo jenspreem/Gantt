@@ -23,8 +23,8 @@ th {text-align: left;}
 }
 
 .tooltip {
-
-   
+  position: relative;
+  
 }
 
 .tooltip .tooltiptext {
@@ -39,15 +39,23 @@ th {text-align: left;}
     z-index: 1;
 }
 
-
 .tooltip:hover .tooltiptext {
     visibility: visible;
 }
 
 
 input {
- display:inline;
-float:left;
-    margin:5px;   
+	display:inline;
+	float:left;
+	margin:5px;   
+}
+
+.updatebox {
+	position: absolute;
+	top: 0px;
+	left: 0px;
+	width: 700px;
+	height: 100%;
+    background-color: #73AD21;
 }
 
