@@ -23,13 +23,11 @@ th {text-align: left;}
 }
 
 .tooltip {
-   
-    position: relative;
-    display: inline-block;
+
    
 }
 
-.tooltip .deletetext {
+.tooltip .tooltiptext {
     visibility: hidden;
     width: 120px;
     background-color: black;
@@ -42,7 +40,7 @@ th {text-align: left;}
 }
 
 
-.tooltip:hover .deletetext {
+.tooltip:hover .tooltiptext {
     visibility: visible;
 }
 

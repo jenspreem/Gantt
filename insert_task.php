@@ -21,17 +21,24 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sql="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),1 )";
+$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),1 )";
+$sqlout="SELECT LAST_INSERT_ID()";
 
 
-#commence sql and get verification
 
-if (mysqli_query($con, $sql)) {
-    echo "New record created successfully";
+if (mysqli_query($con, $sqlin)) {
+	$result = mysqli_fetch_array(mysqli_query($con,$sqlout), MYSQLI_NUM);
+	echo "$result[0]";
+
+
 
 } else {
-    echo "Error: " . $sql . "<br>" . mysqli_error($con);
+    echo "Error: " . $sqlin . "<br>" . mysqli_error($con);
 }
+
+
+
+
 
 mysqli_close($con);
 ?>
