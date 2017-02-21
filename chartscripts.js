@@ -29,7 +29,7 @@ function remTask(x)
 {
  var myrow=x.parentElement.rowIndex;
  var num = document.getElementById("ganttable").rows[1].cells.length;
- var tasknr = document.getElementById("ganttable").rows[myrow].cells[num].innerHTML;
+ var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
 
  if (window.XMLHttpRequest)
   {
@@ -48,10 +48,7 @@ function remTask(x)
      }
   }
 
- //why does tasknr stay undefined? 
-// var tasknr = document.getElementById("ganttable").rows[myrow].cells[num].innerHTML;
- //var tasknr = document.getElementById("ganttable").rows[7].cells[33].innerHTML;
-//var tasknr =135;
+
 
  xmlhttpR.open( "POST", "remove_task.php", true );
  xmlhttpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
@@ -122,6 +119,7 @@ function addTask()
      cell3.innerHTML = Tresp;
      var projstart = document.getElementById("ganttable").rows[0].cells[3].innerHTML;
      var num = table.rows[0].cells.length;
+//first row last cell contains projendtdate its shorten than following rows these have a (currently invisible)cell with taskid also
      var projend = document.getElementById("ganttable").rows[0].cells[num-1].innerHTML;
 //add colored cells
      calcRow(row,projstart,STDate,ENDate,num);    
