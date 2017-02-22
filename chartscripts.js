@@ -27,53 +27,69 @@ function showChart(str)
 
 function remTask(x) 
 {
- var myrow=x.parentElement.rowIndex;
- var num = document.getElementById("ganttable").rows[1].cells.length;
- var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
+	var r = confirm("Do you really want to delete this task?");
+	if (r == false){return;}
+	else (r == true)
+	{
+	var myrow=x.parentElement.rowIndex;
+	var num = document.getElementById("ganttable").rows[1].cells.length;
+	var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
 
- if (window.XMLHttpRequest)
-  {
-    xmlhttpR=new XMLHttpRequest();
-  }   else 
-     { 
-     xmlhttpR=new ActiveXObject("Microsoft.XMLHTTP");
-     }
+		if (window.XMLHttpRequest)
+		{
+		xmlhttpR=new XMLHttpRequest();
+		}
+		else 
+		{ 
+		xmlhttpR=new ActiveXObject("Microsoft.XMLHTTP");
+		}
 
-  xmlhttpR.onreadystatechange=function() 
-  {
-     if (this.readyState==4 && this.status==200) 
-     {
-     document.getElementById("WarningArea").innerHTML=this.responseText;
-     document.getElementById("ganttable").deleteRow(myrow);  
-     }
-  }
+		xmlhttpR.onreadystatechange=function() 
+		{
+			if (this.readyState==4 && this.status==200) 
+			{
+			document.getElementById("WarningArea").innerHTML=this.responseText;
+			document.getElementById("ganttable").deleteRow(myrow);  
+			}
+		}
+	}
 
-
-
- xmlhttpR.open( "POST", "remove_task.php", true );
- xmlhttpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- xmlhttpR.send( "taskid="+encodeURIComponent(tasknr));
-
-
-
-
-
-
+	xmlhttpR.open( "POST", "remove_task.php", true );
+	xmlhttpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xmlhttpR.send( "taskid="+encodeURIComponent(tasknr));
 }
+
 
 function modTask(x)
 {
-//need these later for php
- var myrow=x.parentElement.rowIndex;
- var num = document.getElementById("ganttable").rows[1].cells.length;
- var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
-//rightnow just test popupbox
- updatebox = document.createElement("div");
- updatebox.className = 'updatebox';
- x.appendChild(updatebox);
 
+	function stopEvent(ev) 
+	{
 
+	// this ought to keep td from getting the click?
+	ev.stopPropagation();
 
+	}
+
+	var myrow=x.parentElement.rowIndex;
+	var num = document.getElementById("ganttable").rows[1].cells.length;
+	var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
+	updatebox = document.createElement("div");
+	updatebox.className = 'updatebox';
+	x.appendChild(updatebox);
+	updatebox.addEventListener("click", stopEvent, false);
+	//try browsertype and get html for updatebox
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.open('get', 'modform.html', true);
+		xhr.onreadystatechange = function() 
+		{
+		    if (xhr.readyState == 4 && xhr.status == 200) 
+			{ 
+	        updatebox.innerHTML = xhr.responseText;
+			 $(".datepicker").datepicker();
+		    } 
+		}
+	xhr.send();
 
 
 }
