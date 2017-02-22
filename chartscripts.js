@@ -1,224 +1,47 @@
-//to show  chart
+//global I need an array of arrays to store a gantt chart
+var CHART;
+
+//to get chart data
 function showChart(str) 
 {
-  if (str=="") {
-    document.getElementById("ChartArea").innerHTML='<b>No activity selected</b>';
-    return;
-  }
-  if (window.XMLHttpRequest) {
-    // code for IE7+, Firefox, Chrome, Opera, Safari
-    xmlhttp=new XMLHttpRequest();
-  } else { // code for IE6, IE5
-    xmlhttp=new ActiveXObject("Microsoft.XMLHTTP");
-  }
-  xmlhttp.onreadystatechange=function() {
-    if (this.readyState==4 && this.status==200) {
-      document.getElementById("ChartArea").innerHTML=this.responseText;
 
-//you need the datepicker also inside this newly created element
-      $( ".datepicker" ).datepicker();
-    }
-  }
-  xmlhttp.open("GET","getchart.php?q="+str,true);
-  xmlhttp.send();
-}
-
-
-
-function remTask(x) 
-{
-	var r = confirm("Do you really want to delete this task?");
-	if (r == false){return;}
-	else (r == true)
-	{
-	var myrow=x.parentElement.rowIndex;
-	var num = document.getElementById("ganttable").rows[1].cells.length;
-	var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
-
-		if (window.XMLHttpRequest)
-		{
-		xmlhttpR=new XMLHttpRequest();
-		}
-		else 
-		{ 
-		xmlhttpR=new ActiveXObject("Microsoft.XMLHTTP");
-		}
-
-		xmlhttpR.onreadystatechange=function() 
-		{
-			if (this.readyState==4 && this.status==200) 
-			{
-			document.getElementById("WarningArea").innerHTML=this.responseText;
-			document.getElementById("ganttable").deleteRow(myrow);  
-			}
-		}
-	}
-
-	xmlhttpR.open( "POST", "remove_task.php", true );
-	xmlhttpR.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xmlhttpR.send( "taskid="+encodeURIComponent(tasknr));
-}
-
-
-function modTask(x)
-{
-
-	function stopEvent(ev) 
-	{
-
-	// this ought to keep td from getting the click?
-	ev.stopPropagation();
-
-	}
-
-	var myrow=x.parentElement.rowIndex;
-	var num = document.getElementById("ganttable").rows[1].cells.length;
-	var tasknr = document.getElementById("ganttable").rows[myrow].cells[num-1].innerHTML;
-	updatebox = document.createElement("div");
-	updatebox.className = 'updatebox';
-	x.appendChild(updatebox);
-	updatebox.addEventListener("click", stopEvent, false);
-	//try browsertype and get html for updatebox
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-	xhr.open('get', 'modform.html', true);
-		xhr.onreadystatechange = function() 
+	xhr.onreadystatechange=function()
+	{
+	    if (this.readyState==4 && this.status==200)
 		{
-		    if (xhr.readyState == 4 && xhr.status == 200) 
-			{ 
-	        updatebox.innerHTML = xhr.responseText;
-			 $(".datepicker").datepicker();
-		    } 
+			CHART=JSON.parse(xhr.responseText);
+			buildChart(str);
+			return;
+
 		}
+	}
+	xhr.open("GET","getchart.php?q="+str,true);
 	xhr.send();
-
-
 }
 
-
-
-
-
-function addTask() 
+function buildChart(str)
 {
 
-  var Tname = document.forms["NewEntry"]["TaskInput"].value;
-  var Tresp = document.forms["NewEntry"]["RespInput"].value;
-  var STDate = document.forms["NewEntry"]["StartInput"].value;
-  var ENDate = document.forms["NewEntry"]["EndInput"].value;
+	var table=document.createElement("table");
+	table.setAttribute("id", "ganttable");
+	for(var i = 0, l = CHART.length; i < l; i++)
+	{
+	var row=document.createElement("tr");
+		for(var i2 = 0, l2 = CHART[i].length; i2 < l2; i2++)
+		{
+		var cell=document.createElement("td");
+		cell.innerHTML=CHART[i][i2];
+		row.appendChild(cell);
+		}
+	table.appendChild(row);
 
-  if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
-  {
-    document.getElementById("WarningArea").innerHTML='<b>Fill all fields!</b>';
-    document.forms["NewEntry"].reset();
-    return;
-  }
-  if (window.XMLHttpRequest)
-  {
-    xmlhttp2=new XMLHttpRequest();
-  }   else 
-     { 
-     xmlhttp2=new ActiveXObject("Microsoft.XMLHTTP");
-     }
+	}
+    document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
 
-  xmlhttp2.onreadystatechange=function() 
-  {
-    if (this.readyState==4 && this.status==200) 
-   {
-
-//add new row  update our local html page
-     var table = document.getElementById("ganttable");
-     var row = table.insertRow(-1);
-     var cell1 = row.insertCell(-1);
-     var cell2 = row.insertCell(-1);
-     var cell3 = row.insertCell(-1);
-	 var cell4 = row.insertCell(-1);
-     cell1.innerHTML= "X";
-	 cell2.innerHTML= "[]";
-     var toolspandel = document.createElement("SPAN"); 
-	 toolspandel.innerHTML="click to delete task";
- 	 toolspandel.className="tooltiptext";
-     cell1.className = "tooltip";
-
-     var toolspanmod = document.createElement("SPAN"); 
-	 toolspanmod.innerHTML="click to modify task";
- 	 toolspanmod.className="tooltiptext";
-     cell2.className = "tooltip";
-
-
-
-
-	cell1.addEventListener( 'click', function(){
-	remTask(cell1);
-	
-	} );
-
-	cell2.addEventListener( 'click', function(){
-	modTask(cell2);
-	
-	} );
-
-
-     cell1.appendChild(toolspandel);
-     cell2.appendChild(toolspanmod);
-
-     cell3.innerHTML = Tname;
-     cell4.innerHTML = Tresp;
-//we have now delete modify and activity and person responsible columns before the date columns 
-     var projstart = document.getElementById("ganttable").rows[0].cells[4].innerHTML;
-     var num = table.rows[0].cells.length;
-//first row last cell contains projendtdate its shorten than following rows these have a (currently invisible)cell with taskid also
-     var projend = document.getElementById("ganttable").rows[0].cells[num-1].innerHTML;
-//add colored cells
-     calcRow(row,projstart,STDate,ENDate,num);    
-
-//add invisible cell containing taskid
-	var taskidcell = row.insertCell(-1);
-	taskidcell.style.display = "none";
-//taskid?  - taskid is autogenerated inside mysql so hmm you cannot actually add this info before you get the data back from server!!!
-    taskid=this.responseText;
-	taskidcell.innerHTML=taskid;
-
-    }
-  }
-//send the info to php script to update database with new row
-  xmlhttp2.open( "POST", "insert_task.php", true );
-  xmlhttp2.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-  xmlhttp2.send( "task="+encodeURIComponent(Tname)+
-              "&person="+encodeURIComponent(Tresp)+
-              "&start="+encodeURIComponent(STDate)+
-              "&end="+encodeURIComponent(ENDate) );  
 
 }
 
-
-
-
-function calcRow(r,p1,t1,t2,n) 
-{
-//todo what to do when added dates are larger or smaller than the project end or start 
- var startind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t1)));
- var endind=DifferenceInDays(new Date(Date.parse(p1)),new Date(Date.parse(t2)));
- for(i=0;i<n-4;i++)
- {
-    if (i<=endind && i>=startind)
-    {
-     var redcell = r.insertCell(-1);
-     redcell.className = 'bgtd';
-    } 
-    else 
-    {
-     r.insertCell();
-    }
-  }
-
-}
-
-
-
-function DifferenceInDays(firstDate, secondDate)
-{
-  return Math.round((secondDate-firstDate)/(1000*60*60*24));
-}
 
 
 
