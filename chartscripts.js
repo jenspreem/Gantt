@@ -1,6 +1,7 @@
 //global I need an array of arrays to store a gantt chart
 var CHART;
-var DAYRANGE;
+//for convenience an array that will contain the range of days for gantt chart header
+var DAYRANGE = [];
 
 
 //to get and show chart data
@@ -42,17 +43,33 @@ function buildChart(str)
 //right now just shows start and end etc. mysql table
 	for(var i = 0, l = CHART.length; i < l; i++)
 	{
-	var row=document.createElement("tr");
-	row.appendChild(createTextElement("td","X"));
-	row.appendChild(createTextElement("td","[]"));
+		var row=document.createElement("tr");
+		row.appendChild(createTextElement("td","X"));
+		row.appendChild(createTextElement("td","[]"));
 
-	var taskcell=document.createElement("td");
-	taskcell.innerHTML=CHART[i][1];
-	var resp_cell=document.createElement("td");
-	resp_cell.innerHTML=CHART[i][2];
-	table.appendChild(row);
-	row.appendChild(taskcell);
-	row.appendChild(resp_cell);
+		var taskcell=document.createElement("td");
+		taskcell.innerHTML=CHART[i][1];
+		var resp_cell=document.createElement("td");
+		resp_cell.innerHTML=CHART[i][2];
+		table.appendChild(row);
+		row.appendChild(taskcell);
+		row.appendChild(resp_cell);
+		//loop for dates
+		var startDate = parseDate(CHART[i][3]);
+		var endDate = parseDate(CHART[i][4]);
+		DAYRANGE.forEach(function(datetxt)
+		{
+		var celldate = parseDate(datetxt);
+			if (celldate>=startDate && celldate<=endDate)
+			{
+			row.appendChild(document.createElement("td")).className="bgtd";
+			}
+			else
+			{
+			row.appendChild(document.createElement("td"));
+			}
+
+		;});
 
 	}
     document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
@@ -67,7 +84,10 @@ function getProjLimits(str)
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			DAYRANGE=JSON.parse(xhr.responseText);
+			
+			arrayofsingledayarrays=JSON.parse(xhr.responseText);//stupid return format isnt it
+			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(dayarray[0])});//so lets make it better
+
 			return;
 
 		}
@@ -79,11 +99,21 @@ function getProjLimits(str)
 
 }
 
-function createTextElement(type,txt){
+//helperfunctions
+
+function createTextElement(type,txt)
+{
 	var elem=document.createElement(type);	
     elem.appendChild(document.createTextNode(txt));
 	return elem;
 
+}
+
+function parseDate(str)
+{
+	var dateParts = str.split("-");
+	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//counts months from 0 = january
+	return date;
 }
 
 
