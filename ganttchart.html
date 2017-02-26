@@ -1,22 +1,18 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- my general stylesheet -->
 <link rel="stylesheet" type="text/css" href="chartstyle.css">
-<!-- resources for datepicker -->
+<!-- stylesheet datepicker elements -->
 <link rel="stylesheet" href="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/themes/smoothness/jquery-ui.css">
+<!-- datepicker resources-->
 <script src="https://ajax.googleapis.com/ajax/libs/jquery/1.11.3/jquery.min.js"></script>
 <script src="https://ajax.googleapis.com/ajax/libs/jqueryui/1.11.4/jquery-ui.min.js"></script>  
-<!-- add datepicker when doc ready -->
-<script>
-$(document).ready(function() {
- $(".datepicker").datepicker();
-  });
-</script>
 <!-- scripts to manipulate chart area -->
 <script src="chartscripts.js"> </script>
 
-
 </head>
+
 <body>
 
 <form>
@@ -31,7 +27,7 @@ $(document).ready(function() {
 
 <br>
 <div id="ChartArea"><b>Gantt table information will be listed here</b></div>
-<div id="WarningArea"><b></b></div>
+<div id="NewTaskArea"><b></b></div>
 
 </body>
 </html>

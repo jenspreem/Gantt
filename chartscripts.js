@@ -7,6 +7,8 @@ var DAYRANGE = [];
 //to get and show chart data
 function showChart(str) 
 {
+//dont create chart if str empty
+if (str==""){return;}
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -14,8 +16,9 @@ function showChart(str)
 	    if (this.readyState==4 && this.status==200)
 		{
 			CHART=JSON.parse(xhr.responseText);
-			getProjLimits(str);
+			getProjLimits(str);//synchronous request inside this method so wait before build chart
 			buildChart(str);
+
 			return;
 
 		}
@@ -73,9 +76,14 @@ function buildChart(str)
 
 	}
     document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
+	//jq just makes it so much more concise
+	$("#NewTaskArea").load("newentry.html");
+ 
 
 
 }
+
+
 //gets dayrange from projects start to finish
 function getProjLimits(str)
 {

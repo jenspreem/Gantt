@@ -1,0 +1,22 @@
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+
+<!-- add datepicker when doc ready -->
+<script>
+$(document).ready(function() {
+ $(".datepicker").datepicker();
+  });
+</script>
+</head>
+</body>
+<form name="NewEntry" >
+ <input type="text" name="TaskInput" placeholder="Task" size="12">
+ <input type="text" name="RespInput" placeholder="Person" size="12">
+ <input type="text" name="StartInput" placeholder="StartDate" class="datepicker">
+ <input type="text" name="EndInput" placeholder="EndDate" class="datepicker">
+ <input type="button" value="Create" onclick="addTask()">
+</form>
+</body>
+</html>
