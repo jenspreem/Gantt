@@ -2,7 +2,9 @@
 var CHART;
 //for convenience an array that will contain the range of days for gantt chart header
 var DAYRANGE = [];
-
+//for use with javascript Date objects
+var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
+var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 
 //to get and show chart data
 function showChart(str) 
@@ -40,36 +42,35 @@ function buildChart(str)
 	headrow.appendChild(createTextElement("td","Task"));
 	headrow.appendChild(createTextElement("td","Responsible"));
 	//first row needs dayrange i use foreach for brevity - if efficiency needed? replace with for loop
-	DAYRANGE.forEach(function(datetxt){headrow.appendChild(createTextElement("td",datetxt));});
+	DAYRANGE.forEach(function(date){headrow.appendChild(createTextElement("td",days[date.getDay()]));});
 	table.appendChild(headrow);
+
 
 
 //creates rows with active days in colored cells
 	for(var i = 0, l = CHART.length; i < l; i++)
 	{
 		var row=document.createElement("tr");
-		row.appendChild(createTextElement("td","X"));
+		row.appendChild(createTextElement("td","X")).className="delcell";
+		
 		row.appendChild(createTextElement("td","[]"));
 		row.appendChild(createTextElement("td",CHART[i][1]));
 		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");
 		//loop for dates
-
 		var startDate = parseDate(CHART[i][3]);
 		var endDate = parseDate(CHART[i][4]);
 		calcRowDays(row,startDate,endDate);
-
 		table.appendChild(row);
-
 
 	}
 
     document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
 	//add createnewtask form to newtaskarea -jq just makes it so much more concise - should use it more
 	$("#NewTaskArea").load("newentry.html");
- 
-
-
+	$('.delcell').each(function() {
+    $(this).attr('onClick', 'memTask(this);');
+	});
 }
 
 
@@ -128,7 +129,7 @@ function addTask()
 
 			//add new row to table
 			var row=document.createElement("tr");
-			row.appendChild(createTextElement("td","X"));
+			row.appendChild(createTextElement("td","X")).className="delcell";
 			row.appendChild(createTextElement("td","[]"));
 			row.appendChild(createTextElement("td",Tname));
 			row.appendChild(createTextElement("td",Tresp));
@@ -138,7 +139,6 @@ function addTask()
 
 			//message
 			document.getElementById("MessageArea").innerHTML=this.responseText;
-
 			return;
 		}
 	}
@@ -155,7 +155,37 @@ function addTask()
 
 
 }
+function memTask(x) 
+{
+		alert("FUG");
+}
 
+function remTask(x) 
+{
+
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+    	if (this.readyState==4 && this.status==200) 
+		{
+			document.getElementById("ganttable").deleteRow(x.parentElement.rowIndex);
+     		document.getElementById("MessageArea").innerHTML=this.responseText;
+		}
+	}
+
+ var taskid = CHART[(x.rowIndex+1)][0];
+ xmlhttp.open( "POST", "remove_task.php", true );
+ xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+ xmlhttp.send( "taskid="+encodeURIComponent(taskid));  
+
+
+
+}
+
+
+
+
+//helperfunction for dayrowbuilding
 
 function calcRowDays(row,startDate,endDate)
 {
@@ -181,14 +211,7 @@ function calcRowDays(row,startDate,endDate)
 
 
 
-
-
-
-
-
-
-
-//helperfunctions
+//general helperfunctions
 
 function createTextElement(type,txt)
 {
@@ -202,7 +225,7 @@ function parseDate(str)
 {
 
 	var dateParts = str.split("-");
-	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//counts months from 0 = january
+	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//js counts months from 0 = january, so mod input
 	return date;
 }
 

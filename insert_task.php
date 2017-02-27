@@ -18,7 +18,7 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),$chid )";
+$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%Y-%m-%d'),STR_TO_DATE('$end','%Y-%m-%d'),$chid )";
 $sqlout="SELECT LAST_INSERT_ID()";
 
 
