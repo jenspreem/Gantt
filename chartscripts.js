@@ -68,9 +68,8 @@ function buildChart(str)
     document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
 	//add createnewtask form to newtaskarea -jq just makes it so much more concise - should use it more
 	$("#NewTaskArea").load("newentry.html");
-	$('.delcell').each(function() {
-    $(this).attr('onClick', 'memTask(this);');
-	});
+	setDels();
+
 }
 
 
@@ -139,6 +138,7 @@ function addTask()
 
 			//message
 			document.getElementById("MessageArea").innerHTML=this.responseText;
+			setDels();
 			return;
 		}
 	}
@@ -155,28 +155,25 @@ function addTask()
 
 
 }
-function memTask(x) 
-{
-		alert("FUG");
-}
+
 
 function remTask(x) 
 {
-
+	var rowind = x.parentElement.rowIndex;
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
     	if (this.readyState==4 && this.status==200) 
 		{
-			document.getElementById("ganttable").deleteRow(x.parentElement.rowIndex);
+			document.getElementById("ganttable").deleteRow(rowind);
      		document.getElementById("MessageArea").innerHTML=this.responseText;
 		}
 	}
 
- var taskid = CHART[(x.rowIndex+1)][0];
- xmlhttp.open( "POST", "remove_task.php", true );
- xmlhttp.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- xmlhttp.send( "taskid="+encodeURIComponent(taskid));  
+ var taskid = CHART[rowind-1][0];
+ xhr.open( "POST", "remove_task.php", true );
+ xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+ xhr.send( "taskid="+encodeURIComponent(taskid));  
 
 
 
@@ -229,6 +226,11 @@ function parseDate(str)
 	return date;
 }
 
+function setDels(){
+	$('.delcell').each(function() {
+    $(this).attr('onClick', 'remTask(this);');
+	});
 
+}
 
 
