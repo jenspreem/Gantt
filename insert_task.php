@@ -22,13 +22,13 @@ mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
 $sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),1 )";
-$sqlout="SELECT LAST_INSERT_ID()";
+
 
 
 
 if (mysqli_query($con, $sqlin)) {
-	$result = mysqli_fetch_array(mysqli_query($con,$sqlout), MYSQLI_NUM);
-	echo "$result[0]";
+
+	echo "Record added successfully!";
 
 
 

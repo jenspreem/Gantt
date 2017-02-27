@@ -16,7 +16,7 @@ if (str==""){return;}
 	    if (this.readyState==4 && this.status==200)
 		{
 			CHART=JSON.parse(xhr.responseText);
-			getProjLimits(str);//synchronous request inside this method so wait before build chart
+			getDayrange(str);//synchronous request inside this method so wait before build chart
 			buildChart(str);
 
 			return;
@@ -26,13 +26,14 @@ if (str==""){return;}
 	xhr.open("GET","getchart.php?q="+str,true);
 	xhr.send();
 }
+
 //builds chart html structure
 function buildChart(str)
 {
 
 	var table=document.createElement("table");
 	table.setAttribute("id", "ganttable");
-//create first row in table
+	//create first row in table
 	var headrow = document.createElement("tr");
 	headrow.appendChild(createTextElement("td","X"));
 	headrow.appendChild(createTextElement("td","[]"));
@@ -42,41 +43,28 @@ function buildChart(str)
 	DAYRANGE.forEach(function(datetxt){headrow.appendChild(createTextElement("td",datetxt));});
 	table.appendChild(headrow);
 
-//todo create a gantt table using start and end dates for each row alongside DAYRANGE
-//right now just shows start and end etc. mysql table
+
+//creates rows with active days in colored cells
 	for(var i = 0, l = CHART.length; i < l; i++)
 	{
 		var row=document.createElement("tr");
 		row.appendChild(createTextElement("td","X"));
 		row.appendChild(createTextElement("td","[]"));
-
+		row.appendChild(createTextElement("td",CHART[i][1]));
+		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");
-		taskcell.innerHTML=CHART[i][1];
-		var resp_cell=document.createElement("td");
-		resp_cell.innerHTML=CHART[i][2];
-		table.appendChild(row);
-		row.appendChild(taskcell);
-		row.appendChild(resp_cell);
 		//loop for dates
 		var startDate = parseDate(CHART[i][3]);
 		var endDate = parseDate(CHART[i][4]);
-		DAYRANGE.forEach(function(datetxt)
-		{
-		var celldate = parseDate(datetxt);
-			if (celldate>=startDate && celldate<=endDate)
-			{
-			row.appendChild(document.createElement("td")).className="bgtd";
-			}
-			else
-			{
-			row.appendChild(document.createElement("td"));
-			}
+		calcRowDays(row,startDate,endDate);
 
-		;});
+		table.appendChild(row);
+
 
 	}
+
     document.getElementById("ChartArea").replaceChild(table,document.getElementById("ChartArea").childNodes[0]);
-	//jq just makes it so much more concise
+	//add createnewtask form to newtaskarea -jq just makes it so much more concise - should use it more
 	$("#NewTaskArea").load("newentry.html");
  
 
@@ -85,7 +73,7 @@ function buildChart(str)
 
 
 //gets dayrange from projects start to finish
-function getProjLimits(str)
+function getDayrange(str)
 {
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -106,6 +94,88 @@ function getProjLimits(str)
 
 
 }
+
+function addTask()
+{
+	var Tname = document.forms["NewEntry"]["TaskInput"].value;
+	var Tresp = document.forms["NewEntry"]["RespInput"].value;
+	var STDate = document.forms["NewEntry"]["StartInput"].value;
+	var ENDate = document.forms["NewEntry"]["EndInput"].value;
+
+	if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
+	{
+//todo modal box or something
+		alert("Fill in all fields!");
+		document.forms["NewEntry"].reset();
+		return;
+	}
+
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+	    if (this.readyState==4 && this.status==200)
+		{
+			// maybe check if(this.responseText=="Record added successfully!")
+			//insert new task to CHART
+			CHART.push([Tname,Tresp,STDate,ENDate]);
+			//add new row to table
+			var row=document.createElement("tr");
+			row.appendChild(createTextElement("td","X"));
+			row.appendChild(createTextElement("td","[]"));
+			row.appendChild(createTextElement("td",Tname));
+			row.appendChild(createTextElement("td",Tresp));
+			calcRowDays(row,STDate,ENDate);
+			document.getElementById("ganttable").appendChild(row);
+
+			//message
+			document.getElementById("MessageArea").innerHTML=this.responseText;
+
+			return;
+		}
+	}
+
+	xhr.open( "POST", "insert_task.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send("task="+encodeURIComponent(Tname)
+	+"&person="+encodeURIComponent(Tresp)
+	+"&start="+encodeURIComponent(STDate)
+	+"&end="+encodeURIComponent(ENDate)); 
+	xhr.send();
+
+
+}
+
+
+function calcRowDays(row,startDate,endDate)
+{
+
+	DAYRANGE.forEach(function(datetxt)
+	{
+		var celldate = parseDate(datetxt);
+			if (celldate>=startDate && celldate<=endDate)
+			{
+			row.appendChild(document.createElement("td")).className="bgtd";
+			}
+			else
+			{
+			row.appendChild(document.createElement("td"));
+			}
+
+	;});
+
+
+}
+
+
+
+
+
+
+
+
+
+
+
 
 //helperfunctions
 
