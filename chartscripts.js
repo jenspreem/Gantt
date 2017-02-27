@@ -54,6 +54,7 @@ function buildChart(str)
 		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");
 		//loop for dates
+
 		var startDate = parseDate(CHART[i][3]);
 		var endDate = parseDate(CHART[i][4]);
 		calcRowDays(row,startDate,endDate);
@@ -82,7 +83,7 @@ function getDayrange(str)
 		{
 			
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);//stupid return format isnt it
-			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(dayarray[0])});//so lets make it better
+			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});//so lets make it better
 
 			return;
 
@@ -101,6 +102,7 @@ function addTask()
 	var Tresp = document.forms["NewEntry"]["RespInput"].value;
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
+	var chartID=CHART[0][5];
 
 	if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
 	{
@@ -115,16 +117,23 @@ function addTask()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			// maybe check if(this.responseText=="Record added successfully!")
+			// todo check for successsomehow
 			//insert new task to CHART
-			CHART.push([Tname,Tresp,STDate,ENDate]);
+			var txt=this.responseText;
+			var xml = this.responseXML;
+			var x=xml.getElementsByTagName("taskid")[0];
+			var newid=x.childNodes[0].nodeValue;
+
+			CHART.push([newid,Tname,Tresp,STDate,ENDate,chartID]);
+
 			//add new row to table
 			var row=document.createElement("tr");
 			row.appendChild(createTextElement("td","X"));
 			row.appendChild(createTextElement("td","[]"));
 			row.appendChild(createTextElement("td",Tname));
 			row.appendChild(createTextElement("td",Tresp));
-			calcRowDays(row,STDate,ENDate);
+
+			calcRowDays(row,parseDate(STDate),parseDate(ENDate));
 			document.getElementById("ganttable").appendChild(row);
 
 			//message
@@ -139,8 +148,10 @@ function addTask()
 	xhr.send("task="+encodeURIComponent(Tname)
 	+"&person="+encodeURIComponent(Tresp)
 	+"&start="+encodeURIComponent(STDate)
-	+"&end="+encodeURIComponent(ENDate)); 
-	xhr.send();
+	+"&end="+encodeURIComponent(ENDate)
+	+"&chid="+encodeURIComponent(chartID)
+	); 
+
 
 
 }
@@ -149,9 +160,9 @@ function addTask()
 function calcRowDays(row,startDate,endDate)
 {
 
-	DAYRANGE.forEach(function(datetxt)
+	DAYRANGE.forEach(function(date)
 	{
-		var celldate = parseDate(datetxt);
+		var celldate = date;
 			if (celldate>=startDate && celldate<=endDate)
 			{
 			row.appendChild(document.createElement("td")).className="bgtd";
@@ -189,6 +200,7 @@ function createTextElement(type,txt)
 
 function parseDate(str)
 {
+
 	var dateParts = str.split("-");
 	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//counts months from 0 = january
 	return date;

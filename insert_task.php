@@ -1,9 +1,5 @@
-<!DOCTYPE html>
-<html>
-<head>
-</head>
-<body>
 <?php
+header('Content-Type: text/xml');
 #settings
 date_default_timezone_set('Europe/Helsinki');
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -13,6 +9,7 @@ $task =$_POST["task"];
 $person =$_POST["person"];
 $start =$_POST["start"];
 $end =$_POST["end"];
+$chid =$_POST["chid"];
 #connection to my db
 $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
 if (!$con) {
@@ -21,14 +18,16 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),1 )";
-
+$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%m/%d/%Y'),STR_TO_DATE('$end','%m/%d/%Y'),$chid )";
+$sqlout="SELECT LAST_INSERT_ID()";
 
 
 
 if (mysqli_query($con, $sqlin)) {
+	$result = mysqli_fetch_array(mysqli_query($con,$sqlout), MYSQLI_NUM);
+	echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
+	echo "<taskid>$result[0]</taskid>";
 
-	echo "Record added successfully!";
 
 
 
@@ -43,7 +42,5 @@ if (mysqli_query($con, $sqlin)) {
 mysqli_close($con);
 ?>
 
-</body>
-</html>
 
 
