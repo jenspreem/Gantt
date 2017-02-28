@@ -14,7 +14,7 @@ openModForm
 
 modTask
 - js code
--- needs default input
+-- needs default input -- why is it not working
 - php code
 
 LOOKS
