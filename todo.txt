@@ -1,0 +1,53 @@
+SINGLE CHART
+
+remTASK 
+- add confirmation box to deletion
+addTask
+- add code for wrong input in the type of EndDate<StartDate 
+- add code to cases where new task extends the whole project timeline
+modTask
+- create dialogue box or other method for input form
+- js code
+- php code
+- exceptions!
+LOOKS
+- beautified header1 months,days
+?- beautified header2, interactive to allow week/month etc views?
+?- frozen columns
+
+MULTI CHART
+
+MySQL
+- change table structure - new col?
+
+selectChart
+- hmtl
+- js
+- php
+
+newChart
+- hmtl
+- js
+- php
+
+MULTI USER
+
+ACCOUNT CREATION AND MANAGEMENT
+
+MySQL
+-usertables?
+
+login and create account
+-html
+-js
+-php
+
+
+ACCOUNT USE
+MySql 
+- change table structure - new col for userid
+selectChart - now also incorporate userid value
+- hmtl
+- js
+- php
+
