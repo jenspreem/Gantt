@@ -1,15 +1,27 @@
 <!DOCTYPE html>
 <html>
 <head>
+<!-- add datepicker when doc ready -->
+<script>
+$(document).ready(function() {
+ $(".datepicker").datepicker();
+ $.datepicker.setDefaults({
+     dateFormat: 'yy-mm-dd'
+});
+
+
+  });
+</script>
+
 </head>
 
 
 <body>
 <form name="UpdateForm" >
-<input type="text" name="TaskInput" placeholder="Task" size="12">
-<input type="text" name="RespInput" placeholder="Person" size="12">
-<input type="text" name="StartInput" placeholder="StartDate"class="datepicker">
-<input type="text" name="EndInput" placeholder="EndDate" class="datepicker">
+<input type="text" name="TaskInput" size="12">
+<input type="text" name="RespInput" size="12">
+<input type="text" name="StartInput" class="datepicker">
+<input type="text" name="EndInput"  class="datepicker">
 <input type="button" value="Modify" onclick="modTask(this)">
 </form>
 

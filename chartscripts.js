@@ -197,6 +197,17 @@ function openModForm(x)
 	x.appendChild(updatebox);
 
 	$("#updatebox").load("modform.html");
+//populate modform with default values
+	var rowind = x.parentElement.rowIndex;
+
+	var task = CHART[rowind-1][1];
+	var person = CHART[rowind-1][2];
+	var start = CHART[rowind-1][3];
+	var end  = CHART[rowind-1][4];
+	document.forms["UpdateForm"]["TaskInput"].value=task;
+	document.forms["UpdateForm"]["RespInput"].value=person;
+	document.forms["UpdateForm"]["StartInput"].value=start;
+	document.forms["UpdateForm"]["EndInput"].value=end;
 
 }
 
@@ -204,8 +215,13 @@ function openModForm(x)
 
 function modTask()
 {
-	var rowind = x.parentElement.rowIndex;
+	var rowind = document.getElementById("updatebox").parentElement.parentElement.rowIndex;
 	var taskid = CHART[rowind-1][0];
+	var task = document.forms["UpdateForm"]["TaskInput"].value;
+	var person = document.forms["UpdateForm"]["RespInput"].value;
+	var start = document.forms["UpdateForm"]["StartInput"].value;
+	var end  = document.forms["UpdateForm"]["EndInput"].value;
+	var chartID=CHART[0][5];
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -213,13 +229,22 @@ function modTask()
 		{
 
      		document.getElementById("MessageArea").innerHTML=this.responseText;
+			//lets removeupdatebox from modcell after work is done
+     		var p=document.getElementById("updatebox").parentElement;
+			p.removeChild(p.childNodes[1]);
 		}
 	}
 
 
 	xhr.open( "POST", "mod_task.php", true );
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.send( "taskid="+encodeURIComponent(taskid));  
+	xhr.send( "taskid="+encodeURIComponent(taskid)
+	+"&task="+encodeURIComponent(task)
+	+"&person="+encodeURIComponent(person)
+	+"&start="+encodeURIComponent(start)
+	+"&end="+encodeURIComponent(end)
+	+"&chid="+encodeURIComponent(chartID)
+	);  
 
 
 }
