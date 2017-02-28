@@ -82,7 +82,8 @@ function getDayrange(str)
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			
+			//empty it before filling
+			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);//stupid return format isnt it
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});//so lets make it better
 
@@ -170,7 +171,9 @@ function remTask(x)
 		{
 			document.getElementById("ganttable").deleteRow(rowind);
      		document.getElementById("MessageArea").innerHTML=this.responseText;
-//should maybe also remove the thing from local CHART 
+			//remove the task from local CHART 
+   			 CHART.splice(rowind-1, 1);
+
 		}
 	}
 
@@ -220,7 +223,8 @@ function openModForm(x)
 
 function modTask()
 {
-	var rowind = document.getElementById("updatebox").parentElement.parentElement.rowIndex;
+	var curRow=document.getElementById("updatebox").parentElement.parentElement;
+	var rowind = curRow.rowIndex;
 	var taskid = CHART[rowind-1][0];
 	var task = document.forms["UpdateForm"]["TaskInput"].value;
 	var person = document.forms["UpdateForm"]["RespInput"].value;
@@ -234,9 +238,26 @@ function modTask()
 		{
 
      		document.getElementById("MessageArea").innerHTML=this.responseText;
+			//modify chart
+			CHART[rowind-1][1]=task;
+			CHART[rowind-1][2]=person;
+			CHART[rowind-1][3]=start;
+			CHART[rowind-1][4]=end;
 			//lets removeupdatebox from modcell after work is done
      		var p=document.getElementById("updatebox").parentElement;
 			p.removeChild(p.childNodes[1]);
+			//and modify our row too
+			var modrow=document.createElement("tr");
+			modrow.appendChild(createTextElement("td","X")).className="delcell";
+			modrow.appendChild(createTextElement("td","[]")).className="modcell";
+			modrow.appendChild(createTextElement("td",task));
+			modrow.appendChild(createTextElement("td",person));
+
+			calcRowDays(modrow,parseDate(start),parseDate(end));
+			curRow.parentElement.replaceChild(modrow,curRow);
+
+			
+
 		}
 	}
 
