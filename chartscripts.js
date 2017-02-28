@@ -53,7 +53,7 @@ function buildChart(str)
 		var row=document.createElement("tr");
 		row.appendChild(createTextElement("td","X")).className="delcell";
 		
-		row.appendChild(createTextElement("td","[]"));
+		row.appendChild(createTextElement("td","[]")).className="modcell";
 		row.appendChild(createTextElement("td",CHART[i][1]));
 		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");
@@ -69,6 +69,7 @@ function buildChart(str)
 	//add createnewtask form to newtaskarea -jq just makes it so much more concise - should use it more
 	$("#NewTaskArea").load("newentry.html");
 	setDels();
+	setMods();
 
 }
 
@@ -129,7 +130,7 @@ function addTask()
 			//add new row to table
 			var row=document.createElement("tr");
 			row.appendChild(createTextElement("td","X")).className="delcell";
-			row.appendChild(createTextElement("td","[]"));
+			row.appendChild(createTextElement("td","[]")).className="modcell";
 			row.appendChild(createTextElement("td",Tname));
 			row.appendChild(createTextElement("td",Tresp));
 
@@ -139,6 +140,7 @@ function addTask()
 			//message
 			document.getElementById("MessageArea").innerHTML=this.responseText;
 			setDels();
+			setMods();
 			return;
 		}
 	}
@@ -161,20 +163,63 @@ function remTask(x)
 {
 	var rowind = x.parentElement.rowIndex;
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	var taskid = CHART[rowind-1][0];
 	xhr.onreadystatechange=function()
 	{
     	if (this.readyState==4 && this.status==200) 
 		{
 			document.getElementById("ganttable").deleteRow(rowind);
      		document.getElementById("MessageArea").innerHTML=this.responseText;
+//should maybe also remove the thing from local CHART 
 		}
 	}
 
- var taskid = CHART[rowind-1][0];
- xhr.open( "POST", "remove_task.php", true );
- xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
- xhr.send( "taskid="+encodeURIComponent(taskid));  
 
+	xhr.open( "POST", "remove_task.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send( "taskid="+encodeURIComponent(taskid));  
+
+
+
+}
+
+
+
+function openModForm(x) 
+{
+
+	var updatebox = document.createElement("div");
+//we keep only one updatebox open at any time, right now i think to attach it to row
+//but maybe we'll do a blocking modal window? less mess to code but mabe not as intuitive look
+	updatebox.id = 'updatebox';
+//so that the click updatebox wont also click the parents function which would create more updateboxes
+	updatebox.addEventListener("click", stopEvent, false);
+	x.appendChild(updatebox);
+
+	$("#updatebox").load("modform.html");
+
+}
+
+
+
+function modTask()
+{
+	var rowind = x.parentElement.rowIndex;
+	var taskid = CHART[rowind-1][0];
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+    	if (this.readyState==4 && this.status==200) 
+		{
+
+     		document.getElementById("MessageArea").innerHTML=this.responseText;
+		}
+	}
+
+
+	xhr.open( "POST", "mod_task.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send( "taskid="+encodeURIComponent(taskid));  
 
 
 }
@@ -232,5 +277,22 @@ function setDels(){
 	});
 
 }
+
+function setMods(){
+	$('.modcell').each(function() {
+    $(this).attr('onClick', 'openModForm(this);');
+	});
+
+}
+
+
+
+function stopEvent(ev) 
+{
+// this ought to keep parent from getting the clicks-n-stuff
+	ev.stopPropagation();
+}
+
+
 
 

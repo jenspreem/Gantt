@@ -2,14 +2,21 @@ SINGLE CHART
 
 remTASK 
 - add confirmation box to deletion
+- remove task from local CHART
 addTask
 - add code for wrong input in the type of EndDate<StartDate 
 - add code to cases where new task extends the whole project timeline
+
+openModForm
+- create dialogue box or other method for input form -done
+- js code -done
+- php code - not needed - done
+
 modTask
-- create dialogue box or other method for input form
 - js code
+-- needs default input
 - php code
-- exceptions!
+
 LOOKS
 - beautified header1 months,days
 ?- beautified header2, interactive to allow week/month etc views?
