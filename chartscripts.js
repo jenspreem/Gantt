@@ -162,27 +162,30 @@ function addTask()
 
 function remTask(x) 
 {
-	var rowind = x.parentElement.rowIndex;
-	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
-	var taskid = CHART[rowind-1][0];
-	xhr.onreadystatechange=function()
+
+	if (confirm("Do YOu really want to delete this task?"))
 	{
-    	if (this.readyState==4 && this.status==200) 
+		var rowind = x.parentElement.rowIndex;
+		var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+		var taskid = CHART[rowind-1][0];
+		xhr.onreadystatechange=function()
 		{
-			document.getElementById("ganttable").deleteRow(rowind);
-     		document.getElementById("MessageArea").innerHTML=this.responseText;
-			//remove the task from local CHART 
-   			 CHART.splice(rowind-1, 1);
+	    	if (this.readyState==4 && this.status==200) 
+			{
+				document.getElementById("ganttable").deleteRow(rowind);
+	     		document.getElementById("MessageArea").innerHTML=this.responseText;
+				//remove the task from local CHART 
+	   			 CHART.splice(rowind-1, 1);
 
+			}
 		}
+
+	
+		xhr.open( "POST", "remove_task.php", true );
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send( "taskid="+encodeURIComponent(taskid));  
 	}
-
-
-	xhr.open( "POST", "remove_task.php", true );
-	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-	xhr.send( "taskid="+encodeURIComponent(taskid));  
-
-
+	else {return;}
 
 }
 
