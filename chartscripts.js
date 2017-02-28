@@ -196,7 +196,8 @@ function openModForm(x)
 	updatebox.addEventListener("click", stopEvent, false);
 	x.appendChild(updatebox);
 
-	$("#updatebox").load("modform.html");
+
+    $("#updatebox").load("modform.html", function(){
 //populate modform with default values
 	var rowind = x.parentElement.rowIndex;
 
@@ -208,6 +209,10 @@ function openModForm(x)
 	document.forms["UpdateForm"]["RespInput"].value=person;
 	document.forms["UpdateForm"]["StartInput"].value=start;
 	document.forms["UpdateForm"]["EndInput"].value=end;
+    });
+
+
+
 
 }
 
