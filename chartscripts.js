@@ -100,6 +100,7 @@ function getDayrange(str)
 
 function addTask()
 {
+//sanitation needed
 	var Tname = document.forms["NewEntry"]["TaskInput"].value;
 	var Tresp = document.forms["NewEntry"]["RespInput"].value;
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
@@ -113,6 +114,14 @@ function addTask()
 		document.forms["NewEntry"].reset();
 		return;
 	}
+	if (parseDate(STDate)>parseDate(ENDate)) 
+	{
+//todo modal box or something
+		alert("Start Date cannot be later than End Date");
+		document.forms["NewEntry"].reset();
+		return;
+	}
+
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -234,6 +243,15 @@ function modTask()
 	var start = document.forms["UpdateForm"]["StartInput"].value;
 	var end  = document.forms["UpdateForm"]["EndInput"].value;
 	var chartID=CHART[0][5];
+
+	if (parseDate(start)>parseDate(end)) 
+	{
+//todo modal box or something
+		alert("Start Date cannot be later than End Date");
+		document.forms["NewEntry"].reset();
+		return;
+	}
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{

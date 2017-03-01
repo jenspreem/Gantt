@@ -2,13 +2,15 @@ SINGLE CHART
 
 addTask
 -exceptions!
---add code for wrong input in the type of EndDate<StartDate 
+--add code for wrong input in the type of EndDate<StartDate -done 
 --add code for sanitizing input values
 -- add code to cases where new task extends the whole project timeline
 
 modTask
 - js code
 -- exceptions same as in addTask!
+---EndDate<StartDate - done
+--- add code to cases where new task extends the whole project timeline
 -- add code for sanitizing input values same as addTask!
 
 
