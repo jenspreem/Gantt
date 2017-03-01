@@ -1,5 +1,9 @@
 SINGLE CHART
 
+GENERAL OVERHAUL
+addTASK,MOD,DELETE etc tasks just modify CHART and DAYRANGE arrays
+drawCHART called after that
+
 addTask
 -exceptions!
 --add code for wrong input in the type of EndDate<StartDate -done 

@@ -19,8 +19,7 @@ if (str==""){return;}
 		{
 			CHART=JSON.parse(xhr.responseText);
 			getDayrange(str);//synchronous request inside this method so wait before build chart
-			buildChart(str);
-
+			drawChart();
 			return;
 
 		}
@@ -29,10 +28,13 @@ if (str==""){return;}
 	xhr.send();
 }
 
-//builds chart html structure
-function buildChart(str)
-{
 
+
+//builds HTML chart ("ganttable") from CHART adds it to ChartArea
+function drawChart()
+{
+//it shifted day early
+console.log(DAYRANGE);
 	var table=document.createElement("table");
 	table.setAttribute("id", "ganttable");
 	//create first row in table
@@ -41,18 +43,14 @@ function buildChart(str)
 	headrow.appendChild(createTextElement("td","[]"));
 	headrow.appendChild(createTextElement("td","Task"));
 	headrow.appendChild(createTextElement("td","Responsible"));
-	//first row needs dayrange i use foreach for brevity - if efficiency needed? replace with for loop
+	//first row needs dayrange
 	DAYRANGE.forEach(function(date){headrow.appendChild(createTextElement("td",datestring(date)));});
 	table.appendChild(headrow);
-
-
-
-//creates rows with active days in colored cells
+	//creates rows with active days in colored cells
 	for(var i = 0, l = CHART.length; i < l; i++)
 	{
 		var row=document.createElement("tr");
-		row.appendChild(createTextElement("td","X")).className="delcell";
-		
+		row.appendChild(createTextElement("td","X")).className="delcell";	
 		row.appendChild(createTextElement("td","[]")).className="modcell";
 		row.appendChild(createTextElement("td",CHART[i][1]));
 		row.appendChild(createTextElement("td",CHART[i][2]));
@@ -75,6 +73,7 @@ function buildChart(str)
 
 
 //gets dayrange from projects start to finish
+//todo:callback solution with getchart
 function getDayrange(str)
 {
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -86,19 +85,17 @@ function getDayrange(str)
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);//stupid return format isnt it
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});//so lets make it better
-
 			return;
-
 		}
 	}
-//i keep it in synch with other chart data aquisistion cause they are useless without eachother - so async = false here
+	//i keep it in synch with other chart data aquisistion cause they are useless without eachother - so async = false here
 	xhr.open("GET","getDayrange.php?q="+str,false);
 	xhr.send();
 
-
 }
 
-//input sanitation and exception handling here
+//todo:input sanitation and exception
+//todo:modal boxes for alerts
 function pre_addTask()
 {
 	var Tname = document.forms["NewEntry"]["TaskInput"].value;
@@ -106,17 +103,21 @@ function pre_addTask()
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
 	var chartID=CHART[0][5];
+console.log(STDate);
+console.log(ENDate);
+console.log(parseDate(STDate));
+console.log(parseDate(ENDate));
+
+
 
 	if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
 	{
-//todo modal box or something
 		alert("Fill in all fields!");
 		document.forms["NewEntry"].reset();
 		return;
 	}
 	if (parseDate(STDate)>parseDate(ENDate)) 
 	{
-//todo modal box or something
 		alert("Start Date cannot be later than End Date");
 		document.forms["NewEntry"].reset();
 		return;
@@ -131,13 +132,11 @@ function pre_addTask()
 	}
 	addTask(Tname,Tresp,STDate,ENDate,chartID);
 
-
 }
 
 
 function addTask(t,r,s,e,c)
 {
-//sanitation needed
 	var Tname = t;
 	var Tresp = r;
 	var STDate = s;
@@ -149,29 +148,12 @@ function addTask(t,r,s,e,c)
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			// todo check for successsomehow
-			//insert new task to CHART
-			var txt=this.responseText;
+			//insert new task to CHART using new id
 			var xml = this.responseXML;
 			var x=xml.getElementsByTagName("taskid")[0];
 			var newid=x.childNodes[0].nodeValue;
-
 			CHART.push([newid,Tname,Tresp,STDate,ENDate,chartID]);
-
-			//add new row to table
-			var row=document.createElement("tr");
-			row.appendChild(createTextElement("td","X")).className="delcell";
-			row.appendChild(createTextElement("td","[]")).className="modcell";
-			row.appendChild(createTextElement("td",Tname));
-			row.appendChild(createTextElement("td",Tresp));
-
-			calcRowDays(row,parseDate(STDate),parseDate(ENDate));
-			document.getElementById("ganttable").appendChild(row);
-
-			//message
-			document.getElementById("MessageArea").innerHTML=this.responseText;
-			setDels();
-			setMods();
+			drawChart();
 			return;
 		}
 	}
@@ -185,15 +167,13 @@ function addTask(t,r,s,e,c)
 	+"&chid="+encodeURIComponent(chartID)
 	); 
 
-
-
 }
 
 
 function remTask(x) 
 {
 
-	if (confirm("Do YOu really want to delete this task?"))
+	if (confirm("Do You really want to delete this task?"))
 	{
 		var rowind = x.parentElement.rowIndex;
 		var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -202,15 +182,13 @@ function remTask(x)
 		{
 	    	if (this.readyState==4 && this.status==200) 
 			{
-				document.getElementById("ganttable").deleteRow(rowind);
-	     		document.getElementById("MessageArea").innerHTML=this.responseText;
+
 				//remove the task from local CHART 
 	   			 CHART.splice(rowind-1, 1);
-
-			}
-		}
-
+				drawChart();			
 	
+			}
+		}	
 		xhr.open( "POST", "remove_task.php", true );
 		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 		xhr.send( "taskid="+encodeURIComponent(taskid));  
@@ -220,23 +198,20 @@ function remTask(x)
 }
 
 
-
+//	todo: guarantee there will be only one updatebox at all times
 function openModForm(x) 
 {
 
 	var updatebox = document.createElement("div");
-//we keep only one updatebox open at any time, right now i think to attach it to row
-//but maybe we'll do a blocking modal window? less mess to code but mabe not as intuitive look
 	updatebox.id = 'updatebox';
-//so that the click updatebox wont also click the parents function which would create more updateboxes
+	
+	//prevent click propagation
 	updatebox.addEventListener("click", stopEvent, false);
 	x.appendChild(updatebox);
-
-
+	//load form to div
     $("#updatebox").load("modform.html", function(){
-//populate modform with default values
+	//populate modform with default values
 	var rowind = x.parentElement.rowIndex;
-
 	var task = CHART[rowind-1][1];
 	var person = CHART[rowind-1][2];
 	var start = CHART[rowind-1][3];
@@ -247,20 +222,17 @@ function openModForm(x)
 	document.forms["UpdateForm"]["EndInput"].value=end;
     });
 
-
-
-
 }
 
 
 
 function modTask()
 {
-//these we get from updatebox which we have only one that will be stuck to current row
+	//these we get from updatebox which we have only one that will be stuck to current row
 	var curRow=document.getElementById("updatebox").parentElement.parentElement;
 	var rowind = curRow.rowIndex;
 	var taskid = CHART[rowind-1][0];
-//these come from form inside updatebox
+	//these come from form inside updatebox
 	var task = document.forms["UpdateForm"]["TaskInput"].value;
 	var person = document.forms["UpdateForm"]["RespInput"].value;
 	var start = document.forms["UpdateForm"]["StartInput"].value;
@@ -269,12 +241,12 @@ function modTask()
 
 	if (parseDate(start)>parseDate(end)) 
 	{
-//todo modal box or something
+	//todo modal box or something
 		alert("Start Date cannot be later than End Date");
 		document.forms["NewEntry"].reset();
 		return;
 	}
-//todo if start or end date is larger than current dayrange you should expand dayrange
+	//todo if start or end date is larger than current dayrange you should expand dayrange
 	if (parseDate(STDate)< DAYRANGE[0] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1])
 	{
 	//get from server a new dayrange?
@@ -287,7 +259,7 @@ function modTask()
 		{
 
      		document.getElementById("MessageArea").innerHTML=this.responseText;
-			//modify chart
+			//modify CHART
 			CHART[rowind-1][1]=task;
 			CHART[rowind-1][2]=person;
 			CHART[rowind-1][3]=start;
@@ -295,18 +267,7 @@ function modTask()
 			//lets removeupdatebox from modcell after work is done
      		var p=document.getElementById("updatebox").parentElement;
 			p.removeChild(p.childNodes[1]);
-			//and modify our row too
-			var modrow=document.createElement("tr");
-			modrow.appendChild(createTextElement("td","X")).className="delcell";
-			modrow.appendChild(createTextElement("td","[]")).className="modcell";
-			modrow.appendChild(createTextElement("td",task));
-			modrow.appendChild(createTextElement("td",person));
-
-			calcRowDays(modrow,parseDate(start),parseDate(end));
-			curRow.parentElement.replaceChild(modrow,curRow);
-
-			
-
+			drawChart();
 		}
 	}
 
@@ -348,11 +309,19 @@ function calcRowDays(row,startDate,endDate)
 
 
 }
-//
-function extendDayrange(t,r,start,end,c)
+
+
+
+function extendDayrange(t,r,st,en,c)
 {
-	var sd=parseDate(start);
-	var ed=parseDate(end);
+
+//parsedate is somehow fucking shit up here?
+console.log(st);
+console.log(en);
+console.log(parseDate(st));
+console.log(parseDate(en));
+
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -362,49 +331,23 @@ function extendDayrange(t,r,start,end,c)
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});
-			addTask(t,r,start,end,c);
+			addTask(t,r,st,en,c);
 			return;
 		}
 	}
 
 	xhr.open( "POST", "get_extended_range.php", true );
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
-
-	if (ed<DAYRANGE[0])
-	{
-	var range_start=start;
-	var range_end=datestring(DAYRANGE[DAYRANGE.length-1]);
-	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
-	}
-
-	if (sd>[DAYRANGE.length-1])
-	{
-	var range_start=datestring(DAYRANGE[0]);
-	var range_end=end;
-	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
-	}
+//range from earliest date to latest
+	var dates=[];
+	dates.push(parseDate(st));
+	dates.push(parseDate(en));
+	dates.push(DAYRANGE[0]);
+	dates.push(DAYRANGE[DAYRANGE.length-1]);
+	dates.sort(date_sort_asc);
+	xhr.send("start="+encodeURIComponent(dates[0])+"&end="+encodeURIComponent(dates[dates.length-1]));  
 
 
-	if (sd<DAYRANGE[0] && ed>DAYRANGE[DAYRANGE.length-1])
-	{
-	var range_start=start;
-	var range_end=end;
-	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
-	}
-
-	else if (ed>DAYRANGE[DAYRANGE.length-1])
-	{
-	var range_start=datestring(DAYRANGE[0]);
-	var range_end=end;
-	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
-	}
-
-	else if (sd<DAYRANGE[0])
-	{
-	var range_start=start;
-	var range_end=datestring(DAYRANGE[DAYRANGE.length-1]);
-	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
-	}
 
 }
 
@@ -418,6 +361,12 @@ function createTextElement(type,txt)
 	return elem;
 
 }
+
+function date_sort_asc(date1, date2) {
+  if (date1 > date2) return 1;
+  if (date1 < date2) return -1;
+  return 0;
+};
 
 function parseDate(str)
 {
