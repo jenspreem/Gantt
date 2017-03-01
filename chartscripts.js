@@ -42,7 +42,7 @@ function buildChart(str)
 	headrow.appendChild(createTextElement("td","Task"));
 	headrow.appendChild(createTextElement("td","Responsible"));
 	//first row needs dayrange i use foreach for brevity - if efficiency needed? replace with for loop
-	DAYRANGE.forEach(function(date){headrow.appendChild(createTextElement("td",days[date.getDay()]));});
+	DAYRANGE.forEach(function(date){headrow.appendChild(createTextElement("td",datestring(date)));});
 	table.appendChild(headrow);
 
 
@@ -98,9 +98,9 @@ function getDayrange(str)
 
 }
 
-function addTask()
+//input sanitation and exception handling here
+function pre_addTask()
 {
-//sanitation needed
 	var Tname = document.forms["NewEntry"]["TaskInput"].value;
 	var Tresp = document.forms["NewEntry"]["RespInput"].value;
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
@@ -121,8 +121,28 @@ function addTask()
 		document.forms["NewEntry"].reset();
 		return;
 	}
-//todo if start or end date is larger than current dayrange you should expand dayrange
+//if start or end date is outside current dayrange
+	if (parseDate(STDate)< DAYRANGE[0] || parseDate(STDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)< DAYRANGE[0])
+	{
+	//addExtTask gets new dayrange,and calls addTask with applicable parameters
+	extendDayrange(Tname,Tresp,STDate,ENDate,chartID);
 
+	return;
+	}
+	addTask(Tname,Tresp,STDate,ENDate,chartID);
+
+
+}
+
+
+function addTask(t,r,s,e,c)
+{
+//sanitation needed
+	var Tname = t;
+	var Tresp = r;
+	var STDate = s;
+	var ENDate = e;
+	var chartID=c;
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -236,9 +256,11 @@ function openModForm(x)
 
 function modTask()
 {
+//these we get from updatebox which we have only one that will be stuck to current row
 	var curRow=document.getElementById("updatebox").parentElement.parentElement;
 	var rowind = curRow.rowIndex;
 	var taskid = CHART[rowind-1][0];
+//these come from form inside updatebox
 	var task = document.forms["UpdateForm"]["TaskInput"].value;
 	var person = document.forms["UpdateForm"]["RespInput"].value;
 	var start = document.forms["UpdateForm"]["StartInput"].value;
@@ -253,6 +275,10 @@ function modTask()
 		return;
 	}
 //todo if start or end date is larger than current dayrange you should expand dayrange
+	if (parseDate(STDate)< DAYRANGE[0] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1])
+	{
+	//get from server a new dayrange?
+	}
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -322,9 +348,65 @@ function calcRowDays(row,startDate,endDate)
 
 
 }
+//
+function extendDayrange(t,r,start,end,c)
+{
+	var sd=parseDate(start);
+	var ed=parseDate(end);
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+    	if (this.readyState==4 && this.status==200) 
+		{
+			//empty it before filling
+			DAYRANGE=[];
+			arrayofsingledayarrays=JSON.parse(xhr.responseText);
+			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});
+			addTask(t,r,start,end,c);
+			return;
+		}
+	}
+
+	xhr.open( "POST", "get_extended_range.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+
+	if (ed<DAYRANGE[0])
+	{
+	var range_start=start;
+	var range_end=datestring(DAYRANGE[DAYRANGE.length-1]);
+	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
+	}
+
+	if (sd>[DAYRANGE.length-1])
+	{
+	var range_start=datestring(DAYRANGE[0]);
+	var range_end=end;
+	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
+	}
 
 
+	if (sd<DAYRANGE[0] && ed>DAYRANGE[DAYRANGE.length-1])
+	{
+	var range_start=start;
+	var range_end=end;
+	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
+	}
 
+	else if (ed>DAYRANGE[DAYRANGE.length-1])
+	{
+	var range_start=datestring(DAYRANGE[0]);
+	var range_end=end;
+	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
+	}
+
+	else if (sd<DAYRANGE[0])
+	{
+	var range_start=start;
+	var range_end=datestring(DAYRANGE[DAYRANGE.length-1]);
+	xhr.send("start="+encodeURIComponent(range_start)+"&end="+encodeURIComponent(range_end));  
+	}
+
+}
 
 
 //general helperfunctions
@@ -344,6 +426,19 @@ function parseDate(str)
 	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//js counts months from 0 = january, so mod input
 	return date;
 }
+
+
+function datestring(date) {
+  var mm = date.getMonth() + 1; // /js counts months from 0
+  var dd = date.getDate();
+
+  return [date.getFullYear(),
+          (mm>9 ? '' : '0') + mm,
+          (dd>9 ? '' : '0') + dd
+         ].join('-');
+};
+
+
 
 function setDels(){
 	$('.delcell').each(function() {
