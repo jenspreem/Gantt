@@ -23,7 +23,7 @@ LOOKS
 MULTI CHART
 
 MySQL
-- change table structure - new col?
+- change table structure - new col? - done chart_id existing for a long time already
 
 selectChart
 - hmtl
@@ -50,7 +50,7 @@ login and create account
 
 ACCOUNT USE
 MySql 
-- change table structure - new col for userid
+- change table structure - new col for userid - done
 selectChart - now also incorporate userid value
 - hmtl
 - js

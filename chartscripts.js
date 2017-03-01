@@ -121,6 +121,7 @@ function addTask()
 		document.forms["NewEntry"].reset();
 		return;
 	}
+//todo if start or end date is larger than current dayrange you should expand dayrange
 
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -251,6 +252,7 @@ function modTask()
 		document.forms["NewEntry"].reset();
 		return;
 	}
+//todo if start or end date is larger than current dayrange you should expand dayrange
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
