@@ -1,16 +1,19 @@
 //global I need an array of arrays to store a gantt chart
 var CHART;
-//an array that will contain the range of days for gantt chart header, we get it from server
+//an array that will contain the range of days for  chart header, we get it from server
 var DAYRANGE = [];
 //for use with javascript Date objects
 var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-//lets store current chart id here
+//lets store current chart info here
 var curChartID;
+var curChartName;
 //lets store current user ID here for future multiuser applications, right now mock 1
 var USER=1;
-//charts available
+//all charts available for user stored here
 var CHARTSLIST=[];
+
+//no more globals?
 
 //populate chartlist
 window.onload = getChartList; 
@@ -23,7 +26,6 @@ function getChartList()
 	    if (this.readyState==4 && this.status==200)
 		{
 			CHARTSLIST=JSON.parse(xhr.responseText);
-			console.log(CHARTSLIST);
 			var sel = document.getElementById('ChartList');
 			for(var i = 0; i < CHARTSLIST.length; i++) 
 			{
@@ -47,6 +49,7 @@ function showChart(str)
 {
 //dont create chart if str empty
 if (str==""){return;}
+var x=find(str,CHARTSLIST);
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -56,6 +59,7 @@ if (str==""){return;}
 			CHART=JSON.parse(xhr.responseText);
 			getDayrange(str);//synchronous request inside this method so wait before build chart
 			curChartID=str;
+			curChartName=x;
 			drawChart();
 			return;
 
@@ -170,6 +174,9 @@ function addTask(t,r,s,e)
 	var STDate = s;
 	var ENDate = e;
 	var chartID=curChartID;
+	var chartName=curChartName;
+	var ui=USER;
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -192,6 +199,8 @@ function addTask(t,r,s,e)
 	+"&start="+encodeURIComponent(STDate)
 	+"&end="+encodeURIComponent(ENDate)
 	+"&chid="+encodeURIComponent(chartID)
+	+"&chname="+encodeURIComponent(chartName)
+	+"&ui="+encodeURIComponent(ui)
 	); 
 
 }
@@ -343,7 +352,10 @@ function modTask(t,r,s,e)
 	+"&start="+encodeURIComponent(start)
 	+"&end="+encodeURIComponent(end)
 	+"&chid="+encodeURIComponent(chartID)
-	);  
+	+"&ui="+encodeURIComponent(USER)
+	); 
+//not needed now we dont change chart names maybe a todo
+	//+"&chname="+encodeURIComponent(curChartName) 
 
 
 }
@@ -474,6 +486,17 @@ function stopEvent(ev)
 {
 // this ought to keep parent from getting the clicks-n-stuff
 	ev.stopPropagation();
+}
+
+function find(val, arr)
+{
+	for (var i=0; i < arr.length; i++) 
+	{
+       	if (arr[i][0] === val) 
+		{
+        	return arr[i][1];
+        }
+    }
 }
 
 

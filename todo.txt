@@ -22,10 +22,7 @@ LOOKS
 
 MULTI CHART
 
-selectChart
-- hmtl - done
-- js - mocked
-- php
+add chartname,chartid,user to all CRUD functions! - done
 
 newChart
 - hmtl
