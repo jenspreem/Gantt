@@ -9,14 +9,14 @@ addTask
 --add code for wrong input in the type of EndDate<StartDate -done 
 --add code for sanitizing input values
 -- add code to cases where new task extends the whole project timeline  --done
---- local charbuilding in this case need some work still -- needs to add header stuff totable
---- this might best me solved with access to server otherwise too much local data/computation
+--- local charbuilding in this case need some work still -- done
+
 
 modTask
 - js code
 -- make it impossible to create new updateboxes while first one is unused
 -- exceptions same as in addTask!
----EndDate<StartDate - done
+
 --- add code to cases where new task extends the whole project timeline
 -- add code for sanitizing input values same as addTask!
 

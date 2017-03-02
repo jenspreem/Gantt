@@ -34,6 +34,7 @@ if (str==""){return;}
 function drawChart()
 {
 //it shifted day early
+console.log("bef drawchart");
 console.log(DAYRANGE);
 	var table=document.createElement("table");
 	table.setAttribute("id", "ganttable");
@@ -103,6 +104,7 @@ function pre_addTask()
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
 	var chartID=CHART[0][5];
+console.log("bef pre_addTask");
 console.log(STDate);
 console.log(ENDate);
 console.log(parseDate(STDate));
@@ -142,6 +144,12 @@ function addTask(t,r,s,e,c)
 	var STDate = s;
 	var ENDate = e;
 	var chartID=c;
+
+console.log("bef addTask");
+console.log(STDate);
+console.log(ENDate);
+console.log(parseDate(STDate));
+console.log(parseDate(ENDate));
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -316,6 +324,7 @@ function extendDayrange(t,r,st,en,c)
 {
 
 //parsedate is somehow fucking shit up here?
+console.log("bef extend");
 console.log(st);
 console.log(en);
 console.log(parseDate(st));
@@ -345,7 +354,8 @@ console.log(parseDate(en));
 	dates.push(DAYRANGE[0]);
 	dates.push(DAYRANGE[DAYRANGE.length-1]);
 	dates.sort(date_sort_asc);
-	xhr.send("start="+encodeURIComponent(dates[0])+"&end="+encodeURIComponent(dates[dates.length-1]));  
+console.log(dates);
+	xhr.send("start="+encodeURIComponent(datestring(dates[0]))+"&end="+encodeURIComponent(datestring(dates[dates.length-1])));  
 
 
 
