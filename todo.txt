@@ -1,14 +1,15 @@
 SINGLE CHART
 
 addTask
--exceptions!
 --add code for sanitizing input values
 
 modTask
 
 -- make it impossible to create new updateboxes while first one is unused
---- add code to cases where new task extends the whole project timeline -done
+--- add code to cases where new task extends the whole project timeline -done 
 -- add code for sanitizing input values same as addTask!
+--add close button to modfrom 
+--recreate modform on errors
 
 remTask
 -- add code to only fetch new dayrange from server if dayrange actually changes
@@ -20,9 +21,6 @@ LOOKS
 ?- frozen columns
 
 MULTI CHART
-
-MySQL
-- change table structure - new col? - done chart_id existing for a long time already
 
 selectChart
 - hmtl
@@ -49,8 +47,8 @@ login and create account
 
 ACCOUNT USE
 MySql 
-- change table structure - new col for userid - done
-selectChart - now also incorporate userid value
+
+
 - hmtl
 - js
 - php
