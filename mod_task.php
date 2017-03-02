@@ -24,7 +24,7 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sqlin="UPDATE user1table1 SET Activity ='$task',Person='$person',StartDate=STR_TO_DATE('$start','%Y-%m-%d'),EndDate=STR_TO_DATE('$end','%Y-%m-%d') WHERE id=$tasknr AND chart_id=$chid AND user=$ui";
+$sqlin="UPDATE tasks SET Activity ='$task',Person='$person',StartDate=STR_TO_DATE('$start','%Y-%m-%d'),EndDate=STR_TO_DATE('$end','%Y-%m-%d') WHERE id=$tasknr";
 
 
 

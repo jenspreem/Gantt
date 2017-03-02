@@ -20,7 +20,7 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sqlin="INSERT INTO user1table1 ". "(Activity,Person, StartDate, EndDate, chart_id,chartname,user ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%Y-%m-%d'),STR_TO_DATE('$end','%Y-%m-%d'),'$chid','$chname','$ui' )";
+$sqlin="INSERT INTO tasks ". "(Activity,Person, StartDate, EndDate, chart_id,uid ) ". "VALUES('$task','$person',STR_TO_DATE('$start','%Y-%m-%d'),STR_TO_DATE('$end','%Y-%m-%d'),'$chid','$ui' )";
 $sqlout="SELECT LAST_INSERT_ID()";
 
 

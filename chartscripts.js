@@ -25,6 +25,7 @@ function getChartList()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
+console.log(xhr.responseText);
 			CHARTSLIST=JSON.parse(xhr.responseText);
 			var sel = document.getElementById('ChartList');
 			for(var i = 0; i < CHARTSLIST.length; i++) 

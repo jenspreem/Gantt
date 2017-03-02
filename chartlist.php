@@ -9,9 +9,11 @@ if (!$con) {
 }
 
 
-$sql="SELECT chart_id,chartname FROM user1table1 WHERE user=$q GROUP BY chart_id";
+$sql="SELECT id,name FROM charts WHERE uid=$q";
+$qry=mysqli_query($con,$sql);
+if ($qry==false){echo mysqli_error($con);}
 
-$result = mysqli_fetch_all(mysqli_query($con,$sql), MYSQLI_NUM);
+$result = mysqli_fetch_all($qry, MYSQLI_NUM);
 
 echo json_encode($result);
 

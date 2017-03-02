@@ -19,7 +19,7 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
-$sql="DELETE FROM user1table1 WHERE id=$taskid";
+$sql="DELETE FROM tasks WHERE id=$taskid";
 
 
 #commence sql and get verification

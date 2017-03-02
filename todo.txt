@@ -1,12 +1,9 @@
 SINGLE CHART
-
 addTask
 --add code for sanitizing input values
 
 modTask
 
--- make it impossible to create new updateboxes while first one is unused
---- add code to cases where new task extends the whole project timeline -done 
 -- add code for sanitizing input values same as addTask!
 --add close button to modfrom 
 --recreate modform on errors
@@ -21,8 +18,10 @@ LOOKS
 ?- frozen columns
 
 MULTI CHART
-
-add chartname,chartid,user to all CRUD functions! - done
+MULTITABLE SQL 
+new mysql table structure - done
+modify php sql-s -done
+modify js - remove useless inputs in cruds
 
 newChart
 - hmtl
@@ -34,7 +33,7 @@ MULTI USER
 ACCOUNT CREATION AND MANAGEMENT
 
 MySQL
--usertables?
+-usertables - done
 
 login and create account
 -html
@@ -44,8 +43,6 @@ login and create account
 
 ACCOUNT USE
 MySql 
-
-
 - hmtl
 - js
 - php
