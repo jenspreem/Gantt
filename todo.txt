@@ -1,25 +1,17 @@
 SINGLE CHART
 
-GENERAL OVERHAUL
-addTASK,MOD,DELETE etc tasks just modify CHART and DAYRANGE arrays
-drawCHART called after that
-
 addTask
 -exceptions!
---add code for wrong input in the type of EndDate<StartDate -done 
 --add code for sanitizing input values
--- add code to cases where new task extends the whole project timeline  --done
---- local charbuilding in this case need some work still -- done
-
 
 modTask
-- js code
--- make it impossible to create new updateboxes while first one is unused
--- exceptions same as in addTask!
 
---- add code to cases where new task extends the whole project timeline
+-- make it impossible to create new updateboxes while first one is unused
+--- add code to cases where new task extends the whole project timeline -done
 -- add code for sanitizing input values same as addTask!
 
+remTask
+-- add code to only fetch new dayrange from server if dayrange actually changes
 
 LOOKS
 - beautified modal alerts instead of confirms alerts etc

@@ -1,10 +1,12 @@
 //global I need an array of arrays to store a gantt chart
 var CHART;
-//for convenience an array that will contain the range of days for gantt chart header
+//an array that will contain the range of days for gantt chart header, we get it from server
 var DAYRANGE = [];
 //for use with javascript Date objects
 var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
+//lets store current chart id here
+var curChartID;
 
 //to get and show chart data
 function showChart(str) 
@@ -19,6 +21,7 @@ if (str==""){return;}
 		{
 			CHART=JSON.parse(xhr.responseText);
 			getDayrange(str);//synchronous request inside this method so wait before build chart
+			curChartID=str;
 			drawChart();
 			return;
 
@@ -103,7 +106,7 @@ function pre_addTask()
 	var Tresp = document.forms["NewEntry"]["RespInput"].value;
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
-	var chartID=CHART[0][5];
+
 console.log("bef pre_addTask");
 console.log(STDate);
 console.log(ENDate);
@@ -128,22 +131,22 @@ console.log(parseDate(ENDate));
 	if (parseDate(STDate)< DAYRANGE[0] || parseDate(STDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)< DAYRANGE[0])
 	{
 	//addExtTask gets new dayrange,and calls addTask with applicable parameters
-	extendDayrange(Tname,Tresp,STDate,ENDate,chartID);
+	extendDayrange(Tname,Tresp,STDate,ENDate,addTask);
 
 	return;
 	}
-	addTask(Tname,Tresp,STDate,ENDate,chartID);
+	addTask(Tname,Tresp,STDate,ENDate);
 
 }
 
 
-function addTask(t,r,s,e,c)
+function addTask(t,r,s,e)
 {
 	var Tname = t;
 	var Tresp = r;
 	var STDate = s;
 	var ENDate = e;
-	var chartID=c;
+	var chartID=curChartID;
 
 console.log("bef addTask");
 console.log(STDate);
@@ -192,7 +195,10 @@ function remTask(x)
 			{
 
 				//remove the task from local CHART 
-	   			 CHART.splice(rowind-1, 1);
+	   			CHART.splice(rowind-1, 1);
+				//new dayrange
+//todo  -- later make only call to server if dayrange changes check
+				getDayrange(curChartID);
 				drawChart();			
 	
 			}
@@ -232,20 +238,55 @@ function openModForm(x)
 
 }
 
-
-
-function modTask()
+function pre_modTask()
 {
-	//these we get from updatebox which we have only one that will be stuck to current row
-	var curRow=document.getElementById("updatebox").parentElement.parentElement;
-	var rowind = curRow.rowIndex;
-	var taskid = CHART[rowind-1][0];
 	//these come from form inside updatebox
 	var task = document.forms["UpdateForm"]["TaskInput"].value;
 	var person = document.forms["UpdateForm"]["RespInput"].value;
 	var start = document.forms["UpdateForm"]["StartInput"].value;
 	var end  = document.forms["UpdateForm"]["EndInput"].value;
-	var chartID=CHART[0][5];
+
+console.log("bef pre_modTask");
+console.log(STDate);
+console.log(ENDate);
+console.log(parseDate(STDate));
+console.log(parseDate(ENDate))
+
+	if (parseDate(STDate)>parseDate(ENDate)) 
+	{
+		alert("Start Date cannot be later than End Date");
+//todo close  modform and open new one openmodfrom()
+		return;
+	}
+//if start or end date is outside current dayrange
+	if (parseDate(STDate)< DAYRANGE[0] || parseDate(STDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)< DAYRANGE[0])
+	{
+	//addExtTask gets new dayrange,and calls addTask with applicable parameters
+	extendDayrange(Tname,Tresp,STDate,ENDate,modTask);
+
+	return;
+	}
+	modTask(Tname,Tresp,STDate,ENDate);
+
+
+
+}
+
+
+
+
+
+
+function modTask(t,r,s,e)
+{
+	var Tname = t;
+	var Tresp = r;
+	var STDate = s;
+	var ENDate = e;
+	var chartID=curChartID;
+	var curRow=document.getElementById("updatebox").parentElement.parentElement;
+	var rowind = curRow.rowIndex;
+	var taskid = CHART[rowind-1][0];
 
 	if (parseDate(start)>parseDate(end)) 
 	{
@@ -255,7 +296,7 @@ function modTask()
 		return;
 	}
 	//todo if start or end date is larger than current dayrange you should expand dayrange
-	if (parseDate(STDate)< DAYRANGE[0] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1])
+	if (parseDate(start)< DAYRANGE[0] || parseDate(end)> DAYRANGE[DAYRANGE.length-1])
 	{
 	//get from server a new dayrange?
 	}
@@ -272,6 +313,7 @@ function modTask()
 			CHART[rowind-1][2]=person;
 			CHART[rowind-1][3]=start;
 			CHART[rowind-1][4]=end;
+			//new dayrange
 			//lets removeupdatebox from modcell after work is done
      		var p=document.getElementById("updatebox").parentElement;
 			p.removeChild(p.childNodes[1]);
@@ -320,7 +362,7 @@ function calcRowDays(row,startDate,endDate)
 
 
 
-function extendDayrange(t,r,st,en,c)
+function extendDayrange(t,r,st,en,funct_mod_add)
 {
 
 //parsedate is somehow fucking shit up here?
@@ -340,7 +382,7 @@ console.log(parseDate(en));
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});
-			addTask(t,r,st,en,c);
+			funct_mod_add(t,r,st,en);
 			return;
 		}
 	}
