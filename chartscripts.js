@@ -7,8 +7,8 @@ var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 //lets store current chart id here
 var curChartID;
-//lets store current user ID here for future multiuser applications
-var USER;
+//lets store current user ID here for future multiuser applications, right now mock 1
+var USER=1;
 //charts available
 var CHARTSLIST=[];
 
@@ -17,15 +17,26 @@ window.onload = getChartList;
 
 function getChartList()
 {
-	var chartlist = ["GanttAppCreation","MultichartExample1"];     
-	var sel = document.getElementById('ChartList');
-	for(var i = 0; i < chartlist.length; i++) 
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
 	{
-    	var opt = document.createElement('option');
-    	opt.innerHTML = chartlist[i];
-    	opt.value = i+1;
-    	sel.appendChild(opt);
+	    if (this.readyState==4 && this.status==200)
+		{
+			CHARTSLIST=JSON.parse(xhr.responseText);
+			console.log(CHARTSLIST);
+			var sel = document.getElementById('ChartList');
+			for(var i = 0; i < CHARTSLIST.length; i++) 
+			{
+    			var opt = document.createElement('option');
+    			opt.innerHTML = CHARTSLIST[i][1];
+    			opt.value = CHARTSLIST[i][0];
+    			sel.appendChild(opt);
+			}
+			return;
+		}
 	}
+	xhr.open("GET","chartlist.php?q="+USER,true);
+	xhr.send();
 }
 
 
