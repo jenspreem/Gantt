@@ -23,8 +23,8 @@ LOOKS
 MULTI CHART
 
 selectChart
-- hmtl
-- js
+- hmtl - done
+- js - mocked
 - php
 
 newChart

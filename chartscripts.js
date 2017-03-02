@@ -9,6 +9,27 @@ var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 
 var curChartID;
 //lets store current user ID here for future multiuser applications
 var USER;
+//charts available
+var CHARTSLIST=[];
+
+//populate chartlist
+window.onload = getChartList; 
+
+function getChartList()
+{
+	var chartlist = ["GanttAppCreation","MultichartExample1"];     
+	var sel = document.getElementById('ChartList');
+	for(var i = 0; i < chartlist.length; i++) 
+	{
+    	var opt = document.createElement('option');
+    	opt.innerHTML = chartlist[i];
+    	opt.value = i+1;
+    	sel.appendChild(opt);
+	}
+}
+
+
+
 
 //to get and show chart data
 function showChart(str) 
@@ -218,6 +239,8 @@ function openModForm(x)
 	document.forms["UpdateForm"]["RespInput"].value=person;
 	document.forms["UpdateForm"]["StartInput"].value=start;
 	document.forms["UpdateForm"]["EndInput"].value=end;
+	//prevent other boxes from being formed
+	modsOff();
     });
 
 }
@@ -423,6 +446,13 @@ function setDels(){
 function setMods(){
 	$('.modcell').each(function() {
     $(this).attr('onClick', 'openModForm(this);');
+	});
+
+}
+
+function modsOff(){
+	$('.modcell').each(function() {
+    $(this).attr('onClick', '');
 	});
 
 }
