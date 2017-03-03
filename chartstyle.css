@@ -1,85 +1,35 @@
-table {
+/* I want my forms horizontal*/
+form{display:inline;}
+
+#loginform{
+display: inline-block;
+float:right;
+}
+
+#loginarea
+{
+/*hack to keep height from collapsing because it child is floated right*/
+overflow:auto;
+background-color: #9797bc;
+
+}
+
+
+/*css for ganttables specifically*/
+table 
+{
     width: 100%;
     border-collapse: collapse;
     display: block;
     overflow-x: auto;
-
-
 }
 
-table, td, th {
+table, td, th 
+{
     border: 1px solid black;
     padding: 5px;
-
-
 }
 
 th {text-align: left;}
-
-.bgtd {
-   
-    background-color: red;
-   
-}
-
-form {
-position:relative;
-display:inline-block;
-float:left;
-}
-
-.tooltip {
-  position: relative;
-  
-}
-
-.tooltip .tooltiptext {
-    visibility: hidden;
-    width: 200px;
-    background-color: black;
-    color: #fff;
-    text-align: center;
-    padding: 5px 0;
-    border-radius: 6px;
-    position: absolute;
-    z-index: 1;
-}
-
-.tooltip:hover .tooltiptext {
-    visibility: visible;
-}
-
-
-input {
-	display:inline;
-	float:left;
-	margin:5px;   
-}
-
-#updatebox {
-	float:left;
-	position: absolute;
-	top: 0px;
-	left: 0px;
-	width: 900px;
-	height: 100%;
-    background-color: #73AD21;
-    z-index: 2;
-}
-
-#ChartArea {
-	clear:left;
-
-}
-
-#MessageArea{
-	clear:left;
-
-}
-
-
-.modcell{
-  position: relative;
-}
-
+.bgtd {background-color: red;}
 

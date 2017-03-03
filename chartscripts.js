@@ -1,6 +1,3 @@
-function login(){window.location.href = "ganttchart.html";}
-
-
 //global I need an array of arrays to store a gantt chart
 var CHART;
 //an array that will contain the range of days for  chart header, we get it from server
@@ -15,11 +12,21 @@ var curChartName;
 var USER=1;
 //all charts available for user stored here
 var CHARTSLIST=[];
+//no more globals? maybe you could get by with less? stick stuff in functions and objects?
 
-//no more globals?
+//login section
+function login()
+{
+USER=document.getElementById('username').value;
 
-//populate chartlist
-window.onload = getChartList; 
+$("#apparea").load("apparea.html", function(){
+
+getChartList();});
+
+}
+
+
+
 
 function getChartList()
 {

@@ -14,25 +14,19 @@
 </head>
 
 <body>
+<div id="loginarea">
 
+ <form id="loginform">
+  <input type="text" id="username" placeholder="USER" size="12">
+  <input type="text" id="password" placeholder="PASSWORD" size="12">
+  <input type="button" value="Login" onclick="login()">
+ </form>
+
+</div>
+<br>
+<div id="apparea">
+<div>
 <form>
-<select id="ChartList" onchange="showChart(this.value)">
-<option value="">Select chart:</option>
-</select>
-</form>
 
-<form name="NewChart" >
- <input type="text" id="newchartname"  placeholder="new chart name here" size="20">
- <input type="button" value="Create" onclick="newChart()">
-</form>
-
-
-
-
-<br>
-<div id="ChartArea"><b>Gantt table information will be listed here</b></div>
-<div id="NewTaskArea"><b></b></div>
-<br>
-<div id="MessageArea"><b></b></div>
 </body>
 </html>

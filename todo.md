@@ -7,33 +7,23 @@
     * add code for sanitizing input values same as addTask!
     * add close button to modfrom 
     * recreate modform on errors
+    * code to reduce dayrange if needed
 
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
+    * code to reduce dayrange if needed
 
 #MULTI CHART
-* newChart
-    * hmtl -done
-    * js -done 
-    * php -done
 
 * extendDayrange
     * add code for brand new table
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
-* MySQL
-    * usertables - done
-
 * login and create account
-    * html
-    * js
-    * php
-
-##ACCOUNT USE
-* hmtl
-* js
-* php
+    * html - login done - add create new user
+    * js -- add pw confirmation
+    * php  -- add pw confirmation and creation
 
 #LOOKS
 ##CHARTS
