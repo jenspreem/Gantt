@@ -1,3 +1,6 @@
+function login(){window.location.href = "ganttchart.html";}
+
+
 //global I need an array of arrays to store a gantt chart
 var CHART;
 //an array that will contain the range of days for  chart header, we get it from server
