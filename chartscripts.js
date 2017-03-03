@@ -134,6 +134,34 @@ function getDayrange(str)
 
 }
 
+//todo:sanitation
+function newChart()
+{
+	var chname=document.getElementById('newchartname').value;
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+	    if (this.readyState==4 && this.status==200)
+		{
+			var txt = this.responseTXT;
+     		document.getElementById("MessageArea").innerHTML=this.responseText;
+	//todo: call getchartlist? getchartlist needs modification so it wouldnremove previous options?
+	//for new charts you shoul look up addTask or extendDayrange- you need to create new range if theres none
+	//todo:anything else i missed?
+			return;
+		}
+	}
+
+	xhr.open( "POST", "new_chart.php", true );
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send("chname="+encodeURIComponent(chname)
+	+"&ui="+encodeURIComponent(USER)
+	); 
+}
+
+
+
+
 //todo:input sanitation and exception
 //todo:modal boxes for alerts
 function pre_addTask()
@@ -387,7 +415,8 @@ function calcRowDays(row,startDate,endDate)
 }
 
 
-
+//extends dayrange if inserted task would extend whole project
+//todo: what if we have brand new project?
 function extendDayrange(t,r,st,en,funct_mod_add)
 {
 
@@ -412,6 +441,7 @@ function extendDayrange(t,r,st,en,funct_mod_add)
 	var dates=[];
 	dates.push(parseDate(st));
 	dates.push(parseDate(en));
+//todo: brand new project does not have dayrange at all
 	dates.push(DAYRANGE[0]);
 	dates.push(DAYRANGE[DAYRANGE.length-1]);
 	dates.sort(date_sort_asc);

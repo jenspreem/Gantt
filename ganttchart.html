@@ -18,11 +18,15 @@
 <form>
 <select id="ChartList" onchange="showChart(this.value)">
 <option value="">Select chart:</option>
-
-
-
 </select>
 </form>
+
+<form name="NewChart" >
+ <input type="text" id="newchartname"  placeholder="new chart name here" size="20">
+ <input type="button" value="Create" onclick="newChart()">
+</form>
+
+
 
 
 <br>

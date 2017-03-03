@@ -22,6 +22,12 @@ th {text-align: left;}
    
 }
 
+form {
+position:relative;
+display:inline-block;
+float:left;
+}
+
 .tooltip {
   position: relative;
   
@@ -60,6 +66,17 @@ input {
     background-color: #73AD21;
     z-index: 2;
 }
+
+#ChartArea {
+	clear:left;
+
+}
+
+#MessageArea{
+	clear:left;
+
+}
+
 
 .modcell{
   position: relative;
