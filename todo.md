@@ -13,6 +13,7 @@
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
 
+
 #MULTI CHART
 
 * extendDayrange

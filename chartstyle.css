@@ -33,3 +33,20 @@ table, td, th
 th {text-align: left;}
 .bgtd {background-color: red;}
 
+.modcell
+{
+   position: relative;
+}
+
+
+#updatebox 
+{
+ 	float:left;
+ 	position: absolute;
+ 	top: 0px;
+ 	left: 0px;
+ 	width: 900px;
+ 	height: 100%;
+    background-color: #73AD21;
+    z-index: 2;
+}

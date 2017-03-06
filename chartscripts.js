@@ -35,9 +35,18 @@ function getChartList()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-console.log(xhr.responseText);
+
+
+
 			CHARTSLIST=JSON.parse(xhr.responseText);
 			var sel = document.getElementById('ChartList');
+			//empty before assigining new stuff
+    		var n;
+		    for(n = sel.options.length - 1 ; n >= 1 ; n--)
+    		{
+		        sel.remove(n);
+    		}
+
 			for(var i = 0; i < CHARTSLIST.length; i++) 
 			{
     			var opt = document.createElement('option');
@@ -131,7 +140,7 @@ function getDayrange(str)
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			//empty it before filling
+			
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);//stupid return format isnt it
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});//so lets make it better
@@ -153,11 +162,17 @@ function newChart()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			var txt = this.responseTXT;
-     		document.getElementById("MessageArea").innerHTML=this.responseText;
-	//todo: call getchartlist? getchartlist needs modification so it wouldnremove previous options?
-	//for new charts you shoul look up addTask or extendDayrange- you need to create new range if theres none
+
+	//call getchartlist - modifies CHARTSLIST and creates new selector
+			getChartList();
+	//show new chart  immediately
+			var xml = this.responseXML;
+			var x=xml.getElementsByTagName("CHID")[0];
+			showChart(x); 
+
+	//todo: some bug with addTask - wont show added task immediately
 	//todo:anything else i missed?
+
 			return;
 		}
 	}
@@ -169,6 +184,30 @@ function newChart()
 	); 
 }
 
+function delChart()
+{
+	if (confirm("Do You really want to delete this Chart"))
+	{
+		var cid=curChartID;
+		var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+		xhr.onreadystatechange=function()
+		{
+		    if (this.readyState==4 && this.status==200)
+			{
+			var x = document.createElement("div");
+			getChartList();
+			document.getElementById("ChartArea").replaceChild(x,document.getElementById("ChartArea").childNodes[0]);
+     		document.getElementById("MessageArea").innerHTML=this.responseText;
+			return;
+			}
+		}
+
+		xhr.open( "POST", "del_chart.php", true );
+		xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+		xhr.send("chid="+encodeURIComponent(cid)); 
+	}
+
+}
 
 
 
@@ -180,6 +219,7 @@ function pre_addTask()
 	var Tresp = document.forms["NewEntry"]["RespInput"].value;
 	var STDate = document.forms["NewEntry"]["StartInput"].value;
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
+
 
 	if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
 	{
@@ -193,15 +233,8 @@ function pre_addTask()
 		document.forms["NewEntry"].reset();
 		return;
 	}
-	//if start or end date is outside current dayrange
-	if (parseDate(STDate)< DAYRANGE[0] || parseDate(STDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)> DAYRANGE[DAYRANGE.length-1] || parseDate(ENDate)< DAYRANGE[0])
-	{
-	//addExtTask gets new dayrange,and calls addTask with applicable parameters
+	//dayrange might need extending
 	extendDayrange(Tname,Tresp,STDate,ENDate,addTask);
-
-	return;
-	}
-	addTask(Tname,Tresp,STDate,ENDate);
 
 }
 
@@ -427,6 +460,7 @@ function calcRowDays(row,startDate,endDate)
 
 //extends dayrange if inserted task would extend whole project
 //todo: what if we have brand new project?
+//todo:reduce dayrange?
 function extendDayrange(t,r,st,en,funct_mod_add)
 {
 
@@ -449,14 +483,20 @@ function extendDayrange(t,r,st,en,funct_mod_add)
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 //range from earliest date to latest
 	var dates=[];
-	dates.push(parseDate(st));
-	dates.push(parseDate(en));
-//todo: brand new project does not have dayrange at all
-	dates.push(DAYRANGE[0]);
-	dates.push(DAYRANGE[DAYRANGE.length-1]);
-	dates.sort(date_sort_asc);
-
-	xhr.send("start="+encodeURIComponent(datestring(dates[0]))+"&end="+encodeURIComponent(datestring(dates[dates.length-1])));  
+//brand new project does not have dayrange at all
+	if(DAYRANGE.length > 0)
+	{
+		dates.push(parseDate(st));
+		dates.push(parseDate(en));
+		dates.push(DAYRANGE[0]);
+		dates.push(DAYRANGE[DAYRANGE.length-1]);
+		dates.sort(date_sort_asc);
+		xhr.send("start="+encodeURIComponent(datestring(dates[0]))+"&end="+encodeURIComponent(datestring(dates[dates.length-1])));  
+	}
+	else
+	{
+	xhr.send("start="+encodeURIComponent(st)+"&end="+encodeURIComponent(en));  
+	}
 
 
 

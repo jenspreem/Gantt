@@ -19,13 +19,15 @@ mysqli_select_db($con,"gantt");
 
 #sql to insert the row to  table
 $sqlin="INSERT INTO charts ". "(name,uid) ". "VALUES('$chname','$ui')";
-
+$sqlout="SELECT LAST_INSERT_ID()";
 
 
 
 if (mysqli_query($con, $sqlin)) {
 
-	echo "New chart created, select it from drop down list";
+	$result = mysqli_fetch_array(mysqli_query($con,$sqlout), MYSQLI_NUM);
+	echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
+	echo "<taskid>$result[0]</taskid>";
 
 
 
