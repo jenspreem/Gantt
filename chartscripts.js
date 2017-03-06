@@ -25,11 +25,29 @@ var CHARTSLIST=[];
 //login section
 function login()
 {
-USER=document.getElementById('username').value;
+var u=document.getElementById('username').value;
+var pw=document.getElementById('password').value;
+var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+	    if (this.readyState==4 && this.status==200)
+		{
+			var x=JSON.parse(xhr.responseText);
+			if (x.success==true)
+				{
+				$("#apparea").load("apparea.html", function(){getChartList();});
+				return;
+				}
+			else {return;}
 
-$("#apparea").load("apparea.html", function(){
 
-getChartList();});
+
+
+		}
+	}
+	xhr.open( "POST", "login.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send("uname="+encodeURIComponent(u)+"&pw="+encodeURIComponent(pw)); 
 
 }
 

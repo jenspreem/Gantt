@@ -5,7 +5,6 @@
 * modTask
 
     * add code for sanitizing input values same as addTask!
-    * add close button to modfrom  - done
     * recreate modform on errors
     * code to reduce dayrange if needed
 
@@ -17,8 +16,9 @@
 ##ACCOUNT CREATION AND MANAGEMENT
 * login and create account
     * html - login done - add create new user
-    * js -- add pw confirmation
-    * php  -- add pw confirmation and creation
+    * js -- add pw confirmation - done 
+    * php  -- add pw confirmation -- done
+    * and creation
 
 #LOOKS
 ##CHARTS
