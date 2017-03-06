@@ -1,3 +1,11 @@
+$.ajaxSetup ({
+    // Disable caching of AJAX responses
+	//i might want to change the html of updatebox apparea etc
+    cache: false
+});
+
+
+
 //global I need an array of arrays to store a gantt chart
 var CHART;
 //an array that will contain the range of days for  chart header, we get it from server
@@ -348,6 +356,17 @@ function openModForm(x)
     });
 
 }
+
+function closeModForm(x)
+{
+
+	var updatebox = document.getElementById("updatebox");
+	updatebox.parentNode.removeChild(updatebox);
+	setMods();
+
+
+}
+
 
 function pre_modTask()
 {

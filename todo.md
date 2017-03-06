@@ -5,19 +5,13 @@
 * modTask
 
     * add code for sanitizing input values same as addTask!
-    * add close button to modfrom 
+    * add close button to modfrom  - done
     * recreate modform on errors
     * code to reduce dayrange if needed
 
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
-
-
-#MULTI CHART
-
-* extendDayrange
-    * add code for brand new table
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
