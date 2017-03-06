@@ -10,7 +10,7 @@ $person =$_POST["person"];
 $start =$_POST["start"];
 $end =$_POST["end"];
 $chid =$_POST["chid"];
-$chname =$_POST["chname"];
+
 $ui =$_POST["ui"];
 #connection to my db
 $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');

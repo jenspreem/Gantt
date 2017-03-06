@@ -27,7 +27,7 @@ if (mysqli_query($con, $sqlin)) {
 
 	$result = mysqli_fetch_array(mysqli_query($con,$sqlout), MYSQLI_NUM);
 	echo '<?xml version="1.0" encoding="ISO-8859-1"?>';
-	echo "<taskid>$result[0]</taskid>";
+	echo "<CHID>$result[0]</CHID>";
 
 
 

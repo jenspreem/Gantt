@@ -168,9 +168,13 @@ function newChart()
 	//show new chart  immediately
 			var xml = this.responseXML;
 			var x=xml.getElementsByTagName("CHID")[0];
-			showChart(x); 
+			var newcid=x.childNodes[0].nodeValue;
+			showChart(newcid); 
 
-	//todo: some bug with addTask - wont show added task immediately
+	var chartName=curChartName;
+	var ui=USER;
+
+	//todo: some bug with addTask - wont show added task immediately or cant add task immediatly whats the deal?
 	//todo:anything else i missed?
 
 			return;
@@ -198,6 +202,7 @@ function delChart()
 			getChartList();
 			document.getElementById("ChartArea").replaceChild(x,document.getElementById("ChartArea").childNodes[0]);
      		document.getElementById("MessageArea").innerHTML=this.responseText;
+
 			return;
 			}
 		}
@@ -246,8 +251,16 @@ function addTask(t,r,s,e)
 	var STDate = s;
 	var ENDate = e;
 	var chartID=curChartID;
-	var chartName=curChartName;
 	var ui=USER;
+
+//you have trouble with inserting stuff into freshly created table what are you missing?
+console.log(t);
+console.log(r);
+console.log(s);
+console.log(e);
+console.log(chartID);
+console.log(ui);
+
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -271,7 +284,6 @@ function addTask(t,r,s,e)
 	+"&start="+encodeURIComponent(STDate)
 	+"&end="+encodeURIComponent(ENDate)
 	+"&chid="+encodeURIComponent(chartID)
-	+"&chname="+encodeURIComponent(chartName)
 	+"&ui="+encodeURIComponent(ui)
 	); 
 
@@ -474,6 +486,9 @@ function extendDayrange(t,r,st,en,funct_mod_add)
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});
+console.log(arrayofsingledayarrays);
+console.log(DAYRANGE);
+
 			funct_mod_add(t,r,st,en);
 			return;
 		}
