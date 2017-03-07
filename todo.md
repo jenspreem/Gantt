@@ -15,7 +15,7 @@
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
 * create account
-    * hmtl
+    * hmtl - done
     * js
     * php
     * mysql

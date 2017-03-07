@@ -1,10 +1,14 @@
-function createSalt()
-{
-    $text = md5(uniqid(rand(), TRUE));
-    return substr($text, 0, 6);
-}
+<!DOCTYPE html>
+<html>
+<head>
+</head>
+<body>
+<?php
+$uname =$_POST["uname"];
+$mail =$_POST["mail"];
+echo $uname;
+echo $mail;
+?>
+</body>
+</html>
 
-$salt = createSalt();
-
-    echo "Hello ".$salt."<br />";
-    

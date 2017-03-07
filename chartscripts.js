@@ -25,8 +25,11 @@ var CHARTSLIST=[];
 //login section
 function login()
 {
+	console.log("enlog");
 var u=document.getElementById('username').value;
+
 var pw=document.getElementById('password').value;
+	console.log("jhasgfv");
 var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -48,6 +51,34 @@ var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new Acti
 	xhr.open( "POST", "login.php", true );
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.send("uname="+encodeURIComponent(u)+"&pw="+encodeURIComponent(pw)); 
+
+}
+
+
+function newUser()
+{
+	var uname = "UI";//document.forms["usercreation"]["uname"].value;
+	var mail = "oi";//document.forms["usercreation"]["mail"].value;
+	console.log("v");
+	console.log(uname);
+	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
+	xhr.onreadystatechange=function()
+	{
+	    if (this.readyState==4 && this.status==200)
+		{
+//post confirmation information maybe in modal box
+   // document.getElementById("accimg").src = img.src.replace("img.png", "confirm.png");
+	//console.log(this.responseText);
+//why not reaching here?
+	console.log("mikakas");
+	return;
+		}
+
+	}
+	xhr.open( "POST", "new_user.php", true );
+	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
+	xhr.send("uname="+encodeURIComponent(uname)+"&mail="+encodeURIComponent(mail));
+
 
 }
 
