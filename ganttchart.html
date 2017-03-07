@@ -23,10 +23,48 @@
  </form>
 <button id="delbutton" type="button" onclick="delChart()">Delete Chart</button> 
 </div>
-<br>
+
 <div id="apparea">
-<div>
-<form>
+ <button id="newuser" onclick="document.getElementById('id01').style.display='block'" ></button>
+ <span style="float: right">Or create new user</span>
+
+</div>
+
+<div id="id01" class="modal">
+  
+  <form class="modal-content animate">
+    <div class="imgcontainer">
+      <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
+      <img src="img.png" alt="IMG" class="avatar">
+    </div>
+
+    <div class="container">
+      <label><b>Username</b></label>
+      <input type="text" class="modalinput" placeholder="Enter Username" name="uname" required>
+
+      <label><b>E-mail</b></label>
+      <input type="text" class="modalinput" placeholder="Enter E-mail" name="psw" required>
+        
+      <button class="modalbutton" type="submit">Submit</button>
+
+    </div>
+
+  </form>
+</div>
+
+<script>
+// Get the modal
+var modal = document.getElementById('id01');
+
+// When the user clicks anywhere outside of the modal, close it
+window.onclick = function(event) {
+    if (event.target == modal) {
+        modal.style.display = "none";
+    }
+}
+</script>
+
+
 
 </body>
 </html>

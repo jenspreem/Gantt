@@ -14,11 +14,13 @@
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
-* login and create account
-    * html - login done - add create new user
-    * js -- add pw confirmation - done 
-    * php  -- add pw confirmation -- done
-    * and creation
+* create account
+    * hmtl
+    * js
+    * php
+    * mysql
+
+* logout button
 
 #LOOKS
 ##CHARTS
