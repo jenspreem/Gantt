@@ -15,9 +15,9 @@ var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
 var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
 //lets store current chart info here
 var curChartID;
-var curChartName;
+
 //lets store current user ID here for future multiuser applications, right now mock 1
-var USER=1;
+var USER;
 //all charts available for user stored here
 var CHARTSLIST=[];
 //no more globals? maybe you could get by with less? stick stuff in functions and objects?
@@ -40,6 +40,12 @@ var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new Acti
 				{
 				USER=x.id;
 				$("#apparea").load("apparea.html", function(){getChartList();});
+				var logoutb=document.createElement('button');
+				logoutb.innerText="logout";
+				logoutb.id="loginform";
+				logoutb.onclick=logout;
+				document.getElementById("loginarea").replaceChild(logoutb,document.getElementById("loginform"));
+
 				return;
 				}
 			else {return;}
@@ -53,6 +59,13 @@ var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new Acti
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');
 	xhr.send("uname="+encodeURIComponent(u)+"&pw="+encodeURIComponent(pw)); 
 
+}
+
+
+function logout()
+{
+//lets just reload it all without cache
+window.location.reload(true);
 }
 
 
@@ -139,7 +152,7 @@ var x=find(str,CHARTSLIST);
 			CHART=JSON.parse(xhr.responseText);
 			getDayrange(str);//synchronous request inside this method so wait before build chart
 			curChartID=str;
-			curChartName=x;
+
 			drawChart();
 			return;
 
@@ -230,8 +243,6 @@ function newChart()
 			var x=xml.getElementsByTagName("CHID")[0];
 			var newcid=x.childNodes[0].nodeValue;
 			showChart(newcid); 
-
-	var chartName=curChartName;
 	var ui=USER;
 
 	//todo: some bug with addTask - wont show added task immediately or cant add task immediatly whats the deal?

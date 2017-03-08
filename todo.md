@@ -26,3 +26,15 @@
 * ?beautified header2, interactive to allow week/month etc views?
 * ?frozen columns
 
+#CODE REFACTORING
+
+* for required fields - instead current onclick events
+    * set html required
+    * set onsubmit instead of onclick
+    * use jq preventDefault when adding listener
+* cut down on globals
+    *remove
+    *move to functions
+* cut down on repeating code
+
+
