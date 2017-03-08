@@ -35,8 +35,10 @@ var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new Acti
 	    if (this.readyState==4 && this.status==200)
 		{
 			var x=JSON.parse(xhr.responseText);
+			console.log(x);
 			if (x.success==true)
 				{
+				USER=x.id;
 				$("#apparea").load("apparea.html", function(){getChartList();});
 				return;
 				}
@@ -64,8 +66,12 @@ function newUser()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-
+			//var response=JSON.parse(xhr.responseText);
 			console.log(this.responseText);
+			//console.log(response);
+			document.getElementById("accimg").src = "confirm.png";
+//todo change the modal window text either mail sent or problems(nonunique name, server error etc)
+//change input fields accoridngly - emptyy name if nonunique, lock fields if success
 
 
 			return;

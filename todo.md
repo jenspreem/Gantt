@@ -14,11 +14,8 @@
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
-* create account
-    * hmtl - done
-    * js
-    * php
-    * mysql
+* create account 
+    * check for username unique  
 
 * logout button
 
