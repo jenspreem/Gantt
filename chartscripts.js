@@ -73,21 +73,14 @@ function newUser()
 {
 	var uname = document.forms["usercreation"]["uname"].value;
 	var mail = document.forms["usercreation"]["mail"].value;
-	console.log(uname);
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			//var response=JSON.parse(xhr.responseText);
 			console.log(this.responseText);
-			//console.log(response);
 			document.getElementById("accimg").src = "confirm.png";
-//todo change the modal window text either mail sent or problems(nonunique name, server error etc)
-//change input fields accoridngly - emptyy name if nonunique, lock fields if success
-
-
-			return;
+			return false;
 		}
 
 	}

@@ -32,7 +32,7 @@
 
 <div id="id01" class="modal">
   
-  <form id="usercreation" class="modal-content animate">
+  <form id="usercreation" class="modal-content animate" onsubmit="event.preventDefault(); newUser();">
     <div class="imgcontainer">
       <span onclick="document.getElementById('id01').style.display='none'" class="close" title="Close Modal">&times;</span>
       <img id="accimg" src="img.png" alt="IMG" class="avatar">
@@ -40,12 +40,12 @@
 
     <div class="container">
       <label><b>Username</b></label>
-      <input type="text" class="modalinput" placeholder="Enter Username" name="uname" required>
+      <input type="text" class="modalinput" placeholder="Enter Username" name="uname" required="true">
 
       <label><b>E-mail</b></label>
-      <input type="text" class="modalinput" placeholder="Enter E-mail" name="mail" required>
+      <input type="text" class="modalinput" placeholder="Enter E-mail" name="mail" required="true">
         
-      <button class="modalbutton" type="button" onclick="newUser()">Submit</button>
+      <input class="modalbutton" type="submit"></input>
 
     </div>
 
