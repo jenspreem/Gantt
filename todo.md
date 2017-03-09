@@ -1,10 +1,13 @@
 #SINGLE CHART
 * addTask
     * add code for sanitizing input values
-
+        * js -done
+        * php
 * modTask
 
     * add code for sanitizing input values same as addTask!
+        * js -done
+        * php
     * recreate modform on errors
     * code to reduce dayrange if needed
 

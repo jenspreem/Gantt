@@ -62,7 +62,21 @@ window.location.reload(true);
 function newUser()
 {
 	var uname = document.forms["usercreation"]["uname"].value;
+	if (test_alphanumeric(uname)==false) 
+	{
+		alert("non-alphanumberic input detected in username, only alphanumerals _ and - allowed");
+		return;
+	}
+
 	var mail = document.forms["usercreation"]["mail"].value;
+	
+	if (validateEmail(mail)==false) 
+	{
+		alert("Unusable e-mail address");
+		return;
+	}
+
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -207,10 +221,16 @@ function getDayrange(str)
 
 }
 
-//todo:sanitation
+
 function newChart()
 {
 	var chname=document.getElementById('newchartname').value;
+	if (test_alphanumeric(chname)==false) 
+	{
+		alert("non-alphanumberic input detected, only alphanumerals _ and - allowed");
+		return;
+	}
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -262,7 +282,7 @@ function delChart()
 
 
 
-//todo:input sanitation and exception
+
 //todo:modal boxes for alerts
 function pre_addTask()
 {
@@ -272,6 +292,15 @@ function pre_addTask()
 	var ENDate = document.forms["NewEntry"]["EndInput"].value;
 
 
+	if (test_alphanumeric(Tname)==false || test_alphanumeric(Tresp) ==false || test_alphanumeric(STDate) ==false || test_alphanumeric(ENDate) ==false) 
+	{
+		alert("non-alphanumberic input detected, only alphanumerals _ and - allowed");
+		document.forms["NewEntry"].reset();
+		return;
+	}
+
+
+//stays for SAFARI
 	if (Tname=="" || Tresp =="" || STDate=="" || ENDate=="") 
 	{
 		alert("Fill in all fields!");
@@ -398,6 +427,14 @@ function pre_modTask()
 	var person = document.forms["UpdateForm"]["RespInput"].value;
 	var start = document.forms["UpdateForm"]["StartInput"].value;
 	var end  = document.forms["UpdateForm"]["EndInput"].value;
+
+	if (test_alphanumeric(task)==false || test_alphanumeric(person) ==false || test_alphanumeric(start) ==false || test_alphanumeric(end) ==false) 
+	{
+		alert("non-alphanumberic input detected, only alphanumerals _ and - allowed");
+		document.forms["NewEntry"].reset();
+		return;
+	}
+
 
 	if (parseDate(start)>parseDate(end)) 
 	{
@@ -539,8 +576,6 @@ function extendDayrange(t,r,st,en,funct_mod_add)
 	xhr.send("start="+encodeURIComponent(st)+"&end="+encodeURIComponent(en));  
 	}
 
-
-
 }
 
 
@@ -552,6 +587,21 @@ function createTextElement(type,txt)
 	return elem;
 
 }
+
+function test_alphanumeric(str)
+{
+	var str = str;
+//allows english alphabet,numbers _ and -
+	var patt = new RegExp(/^[a-z0-9_\-]+$/i);
+	var res = patt.test(str);
+	return res;
+}
+
+function validateEmail(email) {
+    var re = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
+    return re.test(email);
+}
+
 
 function date_sort_asc(date1, date2) {
   if (date1 > date2) return 1;
