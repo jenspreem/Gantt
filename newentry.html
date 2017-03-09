@@ -16,12 +16,12 @@ $(document).ready(function() {
 </script>
 </head>
 </body>
-<form name="NewEntry" >
- <input type="text" name="TaskInput" placeholder="Task" size="12" required>
- <input type="text" name="RespInput" placeholder="Person" size="12" required>
- <input type="text" name="StartInput" placeholder="StartDate" class="datepicker" required>
- <input type="text" name="EndInput" placeholder="EndDate" class="datepicker" required>
- <input type="button" value="Create" onclick="pre_addTask()">
+<form name="NewEntry"  onsubmit="event.preventDefault(); pre_addTask();">
+ <input type="text" name="TaskInput" placeholder="Task" size="12" required="true">
+ <input type="text" name="RespInput" placeholder="Person" size="12" required="true">
+ <input type="text" name="StartInput" placeholder="StartDate" class="datepicker" required="true">
+ <input type="text" name="EndInput" placeholder="EndDate" class="datepicker" required="true">
+ <input type="submit" value="Create">
 </form>
 </body>
 </html>

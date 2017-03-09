@@ -9,9 +9,9 @@
 </select>
 </form>
 
-<form name="NewChart" >
- <input type="text" id="newchartname"  placeholder="new chart name here" size="20" required>
- <input type="button" value="Create" onclick="newChart()">
+<form name="NewChart" onsubmit="event.preventDefault(); newChart();" >
+ <input type="text" id="newchartname"  placeholder="new chart name here" size="20" required="true">
+ <input type="submit" value="Create" >
 </form>
 
 <!-- stuff not showing up here was caused by ajax cache in jq <p>WHY DOESNT THIS SHOW UP?</p> -->

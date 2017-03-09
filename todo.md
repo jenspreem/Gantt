@@ -29,9 +29,9 @@
 #CODE REFACTORING
 
 * for required fields - instead current onclick events
-    * set html required
+    * set html required="true"
     * set onsubmit instead of onclick
-    * use jq preventDefault when adding listener
+    * use preventDefault
 * cut down on globals
     *remove
     *move to functions
