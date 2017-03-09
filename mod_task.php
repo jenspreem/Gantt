@@ -16,6 +16,24 @@ $end =$_POST["end"];
 $tasknr =$_POST["taskid"];
 $chid =$_POST["chid"];
 $ui =$_POST["ui"];
+
+//validate and/or sanitize
+//strings
+if (filter_var($task, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK)==false){die('could not sanitize string error');}
+if (filter_var($person, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK)==false){die('could not sanitize string error');}
+$task=filter_var($task, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK);
+$person=filter_var($person, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK);
+
+//dates
+if (!DateTime::createFromFormat('Y-m-d', $start))    {die('Dateformat error');}
+if (!DateTime::createFromFormat('Y-m-d', $end))    {die('Dateformat error');}
+
+//ints
+if (filter_var($chid, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+if (filter_var($ui, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+if (filter_var($tasknr, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+
+
 #connection to my db
 $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
 if (!$con) {

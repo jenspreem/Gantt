@@ -1,4 +1,8 @@
 <?php
+#settings
+date_default_timezone_set('Europe/Helsinki');
+error_reporting(E_ERROR | E_WARNING | E_PARSE);
+ini_set("error_log", "/tmp/php-error.log");
 
 //chartid
 $q = intval($_GET['q']);
@@ -7,6 +11,9 @@ $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
 if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
 }
+
+if (filter_var($q, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+
 
 $rangesql="SELECT c.calendar_date FROM calendar c JOIN(SELECT MIN(StartDate) as startday, MAX(EndDate) as endday FROM tasks WHERE chart_id=$q) u ON c.calendar_date >= u.startday AND c.calendar_date <= u.endday";
 $dayarray = mysqli_fetch_all(mysqli_query($con,$rangesql), MYSQLI_NUM);

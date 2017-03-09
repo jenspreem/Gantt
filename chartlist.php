@@ -8,6 +8,7 @@ if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
 }
 
+if (filter_var($q, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
 
 $sql="SELECT id,name FROM charts WHERE uid=$q";
 $qry=mysqli_query($con,$sql);

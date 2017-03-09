@@ -13,6 +13,17 @@ try {
 
 $uname =$_POST["uname"];
 $mail =$_POST["mail"];
+if (!isset($mail)||$mail=="") {die('no email provided');}
+if (!isset($uname)||$uname=="") {die('no user provided');}
+
+
+if (filter_var($uname, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK)==false){die('could not sanitize string error');}
+$uname=filter_var($uname, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK);
+
+$mail = filter_var($_POST['mail'], FILTER_SANITIZE_EMAIL);
+if (filter_var($mail, FILTER_VALIDATE_EMAIL)==false){die('invalid email');}
+
+
 
 $pw=random_str(6);
 $hash=password_hash($pw,PASSWORD_BCRYPT);

@@ -11,6 +11,9 @@ ini_set("error_log", "/tmp/php-error.log");
 #variables posted
 $taskid =$_POST["taskid"];
 
+
+if (filter_var($taskid, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+
 #connection to my db
 $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
 if (!$con) {

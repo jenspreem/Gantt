@@ -10,6 +10,14 @@ ini_set("error_log", "/tmp/php-error.log");
 
 $chname =$_POST["chname"];
 $ui =$_POST["ui"];
+
+if (filter_var($chname, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK)==false){die('could not sanitize string error');}
+$chname =filter_var($chname, FILTER_SANITIZE_STRING,FILTER_FLAG_NO_ENCODE_QUOTES|FILTER_FLAG_STRIP_HIGH|FILTER_FLAG_STRIP_LOW|FILTER_FLAG_STRIP_BACKTICK);
+
+if (filter_var($ui, FILTER_VALIDATE_INT)==false)    {die('integer value error');}
+
+
+
 #connection to my db
 $con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
 if (!$con) {

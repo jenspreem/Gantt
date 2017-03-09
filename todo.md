@@ -2,18 +2,29 @@
 * addTask
     * add code for sanitizing input values
         * js -done
-        * php
+        * php - done
 * modTask
 
     * add code for sanitizing input values same as addTask!
         * js -done
-        * php
+        * php - done
     * recreate modform on errors
     * code to reduce dayrange if needed
 
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
+* more PHP sanitations
+    * newUser -done
+    * newChart -done
+    * login -done
+    * removetask -done
+    * chartlist -done
+    * getchart -done
+    * getDayrange --done
+    * getextended -done
+
+
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
@@ -30,8 +41,8 @@
 #CODE REFACTORING
 
 * cut down on globals
-    *remove
-    *move to functions
+    * remove
+    * move to functions
 * cut down on repeating code
 
 
