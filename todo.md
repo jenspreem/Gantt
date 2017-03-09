@@ -17,8 +17,6 @@
 * create account 
     * check for username unique  
 
-* logout button
-
 #LOOKS
 ##CHARTS
 * beautified modal alerts instead of confirms alerts etc
@@ -28,10 +26,6 @@
 
 #CODE REFACTORING
 
-* for required fields - instead current onclick events
-    * set html required="true"
-    * set onsubmit instead of onclick
-    * use preventDefault
 * cut down on globals
     *remove
     *move to functions

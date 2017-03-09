@@ -4,23 +4,17 @@ $.ajaxSetup ({
     cache: false
 });
 
-
-
 //global I need an array of arrays to store a gantt chart
 var CHART;
 //an array that will contain the range of days for  chart header, we get it from server
 var DAYRANGE = [];
-//for use with javascript Date objects
-var days = ["Sun","Mon","Tue","Wed","Thu","Fri","Sat"];
-var months = ['Jan', 'Feb', 'Mar', 'Apr', 'May', 'June', 'July', 'Aug', 'Sept', 'Oct', 'Nov', 'Dec'];
-//lets store current chart info here
+//lets store current chart ID here
 var curChartID;
-
-//lets store current user ID here for future multiuser applications, right now mock 1
+//lets store current user ID here 
 var USER;
-//all charts available for user stored here
+//list of all charts available for user stored here for displaying menus
 var CHARTSLIST=[];
-//no more globals? maybe you could get by with less? stick stuff in functions and objects?
+
 
 //login section
 function login()
@@ -49,10 +43,6 @@ var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new Acti
 				return;
 				}
 			else {return;}
-
-
-
-
 		}
 	}
 	xhr.open( "POST", "login.php", true );
@@ -101,8 +91,6 @@ function getChartList()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-
-
 
 			CHARTSLIST=JSON.parse(xhr.responseText);
 			var sel = document.getElementById('ChartList');
@@ -157,7 +145,7 @@ var x=find(str,CHARTSLIST);
 
 
 
-//builds HTML chart ("ganttable") from CHART adds it to ChartArea
+//builds HTML chart ("ganttable") from CHART, adds it to ChartArea
 function drawChart()
 {
 	var table=document.createElement("table");
@@ -198,7 +186,7 @@ function drawChart()
 
 
 //gets dayrange from projects start to finish
-//todo:callback solution with getchart
+//todo:?callback solution with getchart? Or some other such?
 function getDayrange(str)
 {
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -213,7 +201,7 @@ function getDayrange(str)
 			return;
 		}
 	}
-	//i keep it in synch with other chart data aquisistion cause they are useless without eachother - so async = false here
+	//I keep it in synch with other getChart because they are useless without eachother - so async = false here
 	xhr.open("GET","getDayrange.php?q="+str,false);
 	xhr.send();
 
@@ -228,7 +216,6 @@ function newChart()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-
 	//call getchartlist - modifies CHARTSLIST and creates new selector
 			getChartList();
 	//show new chart  immediately
@@ -236,11 +223,7 @@ function newChart()
 			var x=xml.getElementsByTagName("CHID")[0];
 			var newcid=x.childNodes[0].nodeValue;
 			showChart(newcid); 
-	var ui=USER;
-
-	//todo: some bug with addTask - wont show added task immediately or cant add task immediatly whats the deal?
-	//todo:anything else i missed?
-
+			var ui=USER;
 			return;
 		}
 	}
@@ -266,7 +249,6 @@ function delChart()
 			getChartList();
 			document.getElementById("ChartArea").replaceChild(x,document.getElementById("ChartArea").childNodes[0]);
      		document.getElementById("MessageArea").innerHTML=this.responseText;
-
 			return;
 			}
 		}
@@ -316,16 +298,6 @@ function addTask(t,r,s,e)
 	var ENDate = e;
 	var chartID=curChartID;
 	var ui=USER;
-
-//you have trouble with inserting stuff into freshly created table what are you missing?
-console.log(t);
-console.log(r);
-console.log(s);
-console.log(e);
-console.log(chartID);
-console.log(ui);
-
-
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -366,11 +338,10 @@ function remTask(x)
 		{
 	    	if (this.readyState==4 && this.status==200) 
 			{
-
 				//remove the task from local CHART 
 	   			CHART.splice(rowind-1, 1);
 				//new dayrange
-	//todo  -- later make only call to server if dayrange actually changes 
+				//todo  -- later make only call to server if dayrange actually changes 
 				getDayrange(curChartID);
 				drawChart();			
 	
@@ -385,13 +356,12 @@ function remTask(x)
 }
 
 
-//	todo: guarantee there will be only one updatebox at all times
+
 function openModForm(x) 
 {
 
 	var updatebox = document.createElement("div");
 	updatebox.id = 'updatebox';
-	
 	//prevent click propagation
 	updatebox.addEventListener("click", stopEvent, false);
 	x.appendChild(updatebox);
@@ -415,12 +385,9 @@ function openModForm(x)
 
 function closeModForm(x)
 {
-
 	var updatebox = document.getElementById("updatebox");
 	updatebox.parentNode.removeChild(updatebox);
 	setMods();
-
-
 }
 
 
@@ -432,11 +399,10 @@ function pre_modTask()
 	var start = document.forms["UpdateForm"]["StartInput"].value;
 	var end  = document.forms["UpdateForm"]["EndInput"].value;
 
-
 	if (parseDate(start)>parseDate(end)) 
 	{
 		alert("Start Date cannot be later than End Date");
-//todo close  modform and open new one openmodfrom()
+//todo:close  modform and open new one openmodfrom()
 		return;
 	}
 //if start or end date is outside current dayrange
@@ -455,10 +421,6 @@ function pre_modTask()
 }
 
 
-
-
-
-
 function modTask(t,r,s,e)
 {
 	var task = t;
@@ -472,7 +434,7 @@ function modTask(t,r,s,e)
 
 	if (parseDate(start)>parseDate(end)) 
 	{
-	//todo modal box or something
+	//todo: modal box or something
 		alert("Start Date cannot be later than End Date");
 		return;
 	}
@@ -481,13 +443,11 @@ function modTask(t,r,s,e)
 	{
 	//get from server a new dayrange?
 	}
-
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
     	if (this.readyState==4 && this.status==200) 
 		{
-
      		document.getElementById("MessageArea").innerHTML=this.responseText;
 			//modify CHART
 			CHART[rowind-1][1]=task;
@@ -513,9 +473,6 @@ function modTask(t,r,s,e)
 	+"&chid="+encodeURIComponent(chartID)
 	+"&ui="+encodeURIComponent(USER)
 	); 
-//not needed now we dont change chart names maybe a todo
-	//+"&chname="+encodeURIComponent(curChartName) 
-
 
 }
 
@@ -523,7 +480,6 @@ function modTask(t,r,s,e)
 
 
 //helperfunction for dayrowbuilding
-
 function calcRowDays(row,startDate,endDate)
 {
 
@@ -546,11 +502,9 @@ function calcRowDays(row,startDate,endDate)
 
 
 //extends dayrange if inserted task would extend whole project
-//todo: what if we have brand new project?
 //todo:reduce dayrange?
 function extendDayrange(t,r,st,en,funct_mod_add)
 {
-
 
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
@@ -561,9 +515,6 @@ function extendDayrange(t,r,st,en,funct_mod_add)
 			DAYRANGE=[];
 			arrayofsingledayarrays=JSON.parse(xhr.responseText);
 			arrayofsingledayarrays.forEach(function(dayarray){DAYRANGE.push(parseDate(dayarray[0]))});
-console.log(arrayofsingledayarrays);
-console.log(DAYRANGE);
-
 			funct_mod_add(t,r,st,en);
 			return;
 		}
@@ -593,8 +544,7 @@ console.log(DAYRANGE);
 }
 
 
-//general helperfunctions
-
+//other/general helperfunctions
 function createTextElement(type,txt)
 {
 	var elem=document.createElement(type);	
@@ -611,7 +561,6 @@ function date_sort_asc(date1, date2) {
 
 function parseDate(str)
 {
-
 	var dateParts = str.split("-");
 	var date = new Date(dateParts[0], (dateParts[1] - 1), dateParts[2]);//js counts months from 0 = january, so mod input
 	return date;
@@ -621,13 +570,11 @@ function parseDate(str)
 function datestring(date) {
   var mm = date.getMonth() + 1; // /js counts months from 0
   var dd = date.getDate();
-
   return [date.getFullYear(),
           (mm>9 ? '' : '0') + mm,
           (dd>9 ? '' : '0') + dd
          ].join('-');
 };
-
 
 
 function setDels(){
@@ -650,7 +597,6 @@ function modsOff(){
 	});
 
 }
-
 
 
 function stopEvent(ev) 
