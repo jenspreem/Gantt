@@ -8,8 +8,7 @@
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
-* create account 
-    * check for username unique  -- done
+* possibility to change password
 
 #LOOKS
 ##CHARTS
@@ -26,8 +25,8 @@
 * cut down on repeating code
 
 #LAMP structure
-* restructure folders and permissions
-* move php scripts
-* move loadable resources
+* restructure folders and permissions??
+* move php scripts??
+* move loadable resources??
 
 
