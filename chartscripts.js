@@ -82,11 +82,15 @@ function newUser()
 	{
 	    if (this.readyState==4 && this.status==200)
 		{
-			console.log(this.responseText);
-			document.getElementById("accimg").src = "confirm.png";
+			var resp=JSON.parse(this.responseText);
+			//if the insertion was a success
+			if (resp.status=="success"){	document.getElementById("accimg").src = "confirm.png";return false;}
+			//notify if failure was caused by already existing username
+			if (resp.message=="Username already exists"){document.getElementById("accimg").src = "uname_taken.png";return false;}
+			//some other errormessage from response?
+			alert(resp.message);
 			return false;
 		}
-
 	}
 	xhr.open( "POST", "new_user.php", true );
 	xhr.setRequestHeader('Content-Type', 'application/x-www-form-urlencoded');

@@ -1,35 +1,15 @@
 #SINGLE CHART
-* addTask
-    * add code for sanitizing input values
-        * js -done
-        * php - done
 * modTask
-
-    * add code for sanitizing input values same as addTask!
-        * js -done
-        * php - done
     * recreate modform on errors
     * code to reduce dayrange if needed
-
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
-* more PHP sanitations
-    * newUser -done
-    * newChart -done
-    * login -done
-    * removetask -done
-    * chartlist -done
-    * getchart -done
-    * getDayrange --done
-    * getextended -done
-
-
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
 * create account 
-    * check for username unique  
+    * check for username unique  -- done
 
 #LOOKS
 ##CHARTS
@@ -44,5 +24,10 @@
     * remove
     * move to functions
 * cut down on repeating code
+
+#LAMP structure
+* restructure folders and permissions
+* move php scripts
+* move loadable resources
 
 

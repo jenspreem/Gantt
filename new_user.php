@@ -37,29 +37,42 @@ if (!$con) {
 mysqli_select_db($con,"gantt");
 
 
-
-if (mysqli_query($con, $sqlin))
-{
-	$response=array
-	(
-    "status" => "success",
-    "message"   => "password sent to specified email",
-	);
-	$message="you can login in gantapp as $uname : $pw";
-
-	mail($mail, 'gantapp registration', $message);
-echo json_encode($response);
-} 
-else {
+//check if already in database
+$dup = mysqli_query($con,"SELECT * FROM users WHERE name='$uname'");
+$num_rows = mysqli_num_rows($dup);
+if ($num_rows) {
    	$response=array
-	(
-    "status" => "failure",
-    "message"   => mysqli_error($con),
+    ("status" => "failure",
+    "message"   => "Username already exists",
 	);
-echo json_encode($response);
-
+	echo json_encode($response);
 }
 
+//otherwise
+else
+{
+	if (mysqli_query($con, $sqlin))
+	{
+		$response=array
+		(
+    	"status" => "success",
+    	"message"   => "password sent to specified email",
+		);
+		$message="you can use gantapp as $uname : $pw";
+	
+		mail($mail, 'gantapp registration', $message);
+		echo json_encode($response);
+	} 
+	else
+	{
+   		$response=array
+		(
+	    "status" => "failure",
+	    "message"   => mysqli_error($con),
+		);
+	echo json_encode($response);
+	}
+}
 
 
 
