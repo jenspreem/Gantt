@@ -1,8 +1,8 @@
-<?php
+<?php 
+require_once '../dbinf.php'; 
+
 //https://github.com/paragonie/random_compat/blob/master/README.md
 //rand_int 5.6 library
-
-
 try {
     require 'random_compat.phar';
 } catch (Exception $e) {
@@ -30,7 +30,7 @@ $hash=password_hash($pw,PASSWORD_BCRYPT);
 $sqlin="INSERT INTO users (name,pw,mail) VALUES('$uname','$hash','$mail')";
 
 #connection to my db
-$con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
+$con = mysqli_connect(DB_SERVER , DB_USER, DB_PASSWORD, DB_DATABASE);
 if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
 }

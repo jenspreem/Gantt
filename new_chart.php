@@ -1,4 +1,5 @@
-<?php
+<?php 
+require_once '../dbinf.php'; 
 header('Content-Type: text/xml');
 #settings
 date_default_timezone_set('Europe/Helsinki');
@@ -19,7 +20,7 @@ if (filter_var($ui, FILTER_VALIDATE_INT)==false)    {die('integer value error');
 
 
 #connection to my db
-$con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
+$con = mysqli_connect(DB_SERVER , DB_USER, DB_PASSWORD, DB_DATABASE);
 if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
 }

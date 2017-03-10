@@ -1,4 +1,5 @@
-<?php
+<?php 
+require_once '../dbinf.php'; 
 #settings
 date_default_timezone_set('Europe/Helsinki');
 error_reporting(E_ERROR | E_WARNING | E_PARSE);
@@ -9,7 +10,7 @@ $start =$_POST["start"];
 $end =$_POST["end"];
 
 #create connection
-$con = mysqli_connect('localhost','ganttuser1','pw1','gantt');
+$con = mysqli_connect(DB_SERVER , DB_USER, DB_PASSWORD, DB_DATABASE);
 if (!$con) {
     die('Could not connect: ' . mysqli_error($con));
 }

@@ -5,7 +5,8 @@
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
-
+* move delete chart button to apparea
+* create a settings file for all php scripts
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
 * possibility to change password
@@ -24,9 +25,11 @@
     * move to functions
 * cut down on repeating code
 
-#LAMP structure
-* restructure folders and permissions??
-* move php scripts??
-* move loadable resources??
 
+#SECURITY
+* store sensitive info somewhere outside browser accessible folder  -- done
+* create sessions ID? right now after confirmation user ID is retrieved
+and used for all requests 
+    * this could be a risk if someone manages to post numbers to php scripts
+    * so maybe - on login script create session password and hash no retrieves without it
 
