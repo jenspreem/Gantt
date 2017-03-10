@@ -1,5 +1,6 @@
 <?php 
-require_once '../dbinf.php'; 
+require_once '../dbinf.php';
+require_once 'settings.php'; 
 
 #user identifier
 $q = intval($_GET['q']);

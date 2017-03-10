@@ -1,5 +1,6 @@
 <?php 
-require_once '../dbinf.php'; 
+require_once '../dbinf.php';
+require_once 'settings.php'; 
 header('Content-Type: text/xml');
 #settings
 date_default_timezone_set('Europe/Helsinki');

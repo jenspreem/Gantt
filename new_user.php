@@ -1,5 +1,6 @@
 <?php 
-require_once '../dbinf.php'; 
+require_once '../dbinf.php';
+require_once 'settings.php'; 
 
 //https://github.com/paragonie/random_compat/blob/master/README.md
 //rand_int 5.6 library

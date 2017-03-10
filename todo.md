@@ -5,7 +5,8 @@
 * remTask
     * add code to only fetch new dayrange from server if dayrange actually changes
     * code to reduce dayrange if needed
-* create a settings file for all php scripts
+
+
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
 * possibility to change password
