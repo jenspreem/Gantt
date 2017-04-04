@@ -181,8 +181,15 @@ function drawChart()
 	for(var i = 0, l = CHART.length; i < l; i++)
 	{
 		var row=document.createElement("tr");
-		row.appendChild(createTextElement("td","X")).className="delcell";	
-		row.appendChild(createTextElement("td","[]")).className="modcell";
+
+//    <tr><td><button class="editbtn">edit</button></td></tr>
+//tee delcellist ja modcellist nupud
+		var dt=document.createElement("td");
+		dt.appendChild(createTextElement("button","X")).className="delcell";
+		row.appendChild(dt);	
+		var mt = document.createElement("td");
+		mt.appendChild(createTextElement("button","[]")).className="modcell";
+		row.appendChild(mt);
 		row.appendChild(createTextElement("td",CHART[i][1]));
 		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");
@@ -364,7 +371,7 @@ function remTask(x)
 
 	if (confirm("Do You really want to delete this task?"))
 	{
-		var rowind = x.parentElement.rowIndex;
+		var rowind = x.parentElement.parentElement.rowIndex;
 		var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 		var taskid = CHART[rowind-1][0];
 		xhr.onreadystatechange=function()
@@ -397,11 +404,11 @@ function openModForm(x)
 	updatebox.id = 'updatebox';
 	//prevent click propagation
 	updatebox.addEventListener("click", stopEvent, false);
-	x.appendChild(updatebox);
+	x.parentElement.appendChild(updatebox);
 	//load form to div
     $("#updatebox").load("modform.html", function(){
 	//populate modform with default values
-	var rowind = x.parentElement.rowIndex;
+	var rowind = x.parentElement.parentElement.rowIndex;
 	var task = CHART[rowind-1][1];
 	var person = CHART[rowind-1][2];
 	var start = CHART[rowind-1][3];
