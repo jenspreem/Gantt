@@ -186,10 +186,14 @@ function drawChart()
 //tee delcellist ja modcellist nupud
 		var dt=document.createElement("td");
 		dt.appendChild(createTextElement("button","X")).className="delcell";
+
 		row.appendChild(dt);	
 		var mt = document.createElement("td");
 		mt.appendChild(createTextElement("button","[]")).className="modcell";
 		row.appendChild(mt);
+
+
+
 		row.appendChild(createTextElement("td",CHART[i][1]));
 		row.appendChild(createTextElement("td",CHART[i][2]));
 		var taskcell=document.createElement("td");

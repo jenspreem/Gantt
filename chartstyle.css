@@ -25,29 +25,54 @@ background-color: #9797bc;
 
 
 /*css for ganttables specifically*/
-table 
+#ChartArea
 {
-    width: 100%;
-    border-collapse: collapse;
-    display: block;
-    overflow-x: auto;
+margin-left:340px;
+overflow-x:auto;  
+overflow-y:visible;
+padding:0;
 }
 
-table, td, th 
-{
-	position:relative;
-    border: 1px solid black;
-    padding: 5px;
-}
+#ganttable { border-collapse:collapse; border-spacing:0;border-top: 1px solid grey; }
+#ganttable td, th {
+            margin:0;
+            border:1px solid grey;
+            white-space:nowrap;
+            border-top-width:0px;
 
-th {text-align: left;}
+        }
+#ganttable tr{height:20px}
+
+/*make the first 4 cols "frozen", should make different td,th stuff for these ones for bordersetc */
+#ganttable td:first-child { position:absolute;left:0px; min-width:20px,max-width:20px;}
+#ganttable td:nth-child(2) {position:absolute;left:20px;min-width:20px;max-width:20px;}
+#ganttable td:nth-child(3) {position:absolute;left:40px;min-width:150;max-width:150px;text-overflow: ellipsis; overflow:hidden}
+#ganttable td:nth-child(4) {position:absolute;left:190px; min-width:150px;max-width:150px;text-overflow: ellipsis;overflow:hidden}
+
+
+
+
+
 .bgtd {background-color: red;}
 
 .modcell
 {
+   display: inline-block;
    position: relative;
+   width:20px;
+	height:20px;
+	text-align:center;
+margin:auto;
 }
-
+.delcell
+{
+   display: inline-block;
+   position: relative;
+   width:20px;
+	height:20px;
+	text-align:center;
+margin:auto;
+}
 
 #updatebox 
 {
@@ -60,6 +85,11 @@ th {text-align: left;}
     background-color: #73AD21;
     z-index: 2;
 }
+
+
+
+
+
 
 /* modal box for new user*/
 
@@ -171,6 +201,7 @@ span.psw {
     }
 
 }
+
 
 
 

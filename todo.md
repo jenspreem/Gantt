@@ -13,11 +13,11 @@
 
 #LOOKS
 ##CHARTS
-* modify task and delete task as **buttons** --done!
 * beautified modal alerts instead of confirms alerts etc
 * beautified header1 months,days
 * ?beautified header2, interactive to allow week/month etc views?
-* ?frozen columns - priority
+* frozen columns - done
+* frozen columns beautify styling -priority
 * task colors
 * drag-n-drop on tasks?
 
