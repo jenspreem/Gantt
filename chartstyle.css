@@ -41,13 +41,17 @@ padding:0;
             border-top-width:0px;
 
         }
-#ganttable tr{height:20px}
+#ganttable tr{height:20px;}
 
-/*make the first 4 cols "frozen", should make different td,th stuff for these ones for bordersetc */
-#ganttable td:first-child { position:absolute;left:0px; min-width:20px,max-width:20px;}
+
+
+/*make the first 4 cols "frozen", for some reason right cell borders run too far? what to do */
+#ganttable td:first-child { position:absolute;left:0px; min-width:20px;max-width:20px;}
 #ganttable td:nth-child(2) {position:absolute;left:20px;min-width:20px;max-width:20px;}
-#ganttable td:nth-child(3) {position:absolute;left:40px;min-width:150;max-width:150px;text-overflow: ellipsis; overflow:hidden}
-#ganttable td:nth-child(4) {position:absolute;left:190px; min-width:150px;max-width:150px;text-overflow: ellipsis;overflow:hidden}
+#ganttable td:nth-child(3) {position:absolute;left:40px;min-width:150px;max-width:150px;text-overflow: ellipsis; overflow:hidden;}
+#ganttable td:nth-child(4) {position:absolute;left:190px; min-width:150px;max-width:150px;text-overflow: ellipsis;overflow:hidden;}
+/*first row to have a top border*/
+.headcol {border-top-width:1px !important;}
 
 
 
@@ -60,18 +64,20 @@ padding:0;
    display: inline-block;
    position: relative;
    width:20px;
-	height:20px;
-	text-align:center;
-margin:auto;
+   height:20px;
+   text-align:center;
+   margin:auto;
+   padding: 0px;
 }
 .delcell
 {
    display: inline-block;
    position: relative;
    width:20px;
-	height:20px;
-	text-align:center;
-margin:auto;
+   height:20px;
+   text-align:center;
+   margin:auto;
+   padding: 0px;
 }
 
 #updatebox 
@@ -85,10 +91,6 @@ margin:auto;
     background-color: #73AD21;
     z-index: 2;
 }
-
-
-
-
 
 
 /* modal box for new user*/

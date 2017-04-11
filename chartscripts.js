@@ -170,10 +170,10 @@ function drawChart()
 	table.setAttribute("id", "ganttable");
 	//create first row in table
 	var headrow = document.createElement("tr");
-	headrow.appendChild(createTextElement("td","X"));
-	headrow.appendChild(createTextElement("td","[]"));
-	headrow.appendChild(createTextElement("td","Task"));
-	headrow.appendChild(createTextElement("td","Responsible"));
+	headrow.appendChild(createTextElement("td","X")).className="headcol";
+	headrow.appendChild(createTextElement("td","[]")).className="headcol";
+	headrow.appendChild(createTextElement("td","Task")).className="headcol";
+	headrow.appendChild(createTextElement("td","Responsible")).className="headcol";
 	//first row needs dayrange
 	DAYRANGE.forEach(function(date){headrow.appendChild(createTextElement("td",datestring(date)));});
 	table.appendChild(headrow);
