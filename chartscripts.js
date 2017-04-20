@@ -214,8 +214,8 @@ function drawChart()
 }
 
 
-//gets dayrange from projects start to finish
-//todo:?callback solution with getchart? Or some other such?
+//gets dayrange from projects start to finish it, stops the thread as it is only called inside functions that cannot continue without its result
+//should I think on some other solution like multiquery? it would stay the same just in some cases reduce the connections/requests made
 function getDayrange(str)
 {
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
@@ -230,7 +230,7 @@ function getDayrange(str)
 			return;
 		}
 	}
-	//I keep it in synch with other getChart because they are useless without eachother - so async = false here
+	//I keep it in synch with other functions that depend on the returned result because they are useless without eachother - so async = false here
 	xhr.open("GET","getDayrange.php?q="+str,false);
 	xhr.send();
 
@@ -385,7 +385,9 @@ function remTask(x)
 				//remove the task from local CHART 
 	   			CHART.splice(rowind-1, 1);
 				//new dayrange
-				//todo  -- later make only call to server if dayrange actually changes 
+				//should I make only call to server if dayrange actually shrinks 
+				//how can we even calculate it easily locally -
+				//must be if the start or end dates are min and/or max ???
 				getDayrange(curChartID);
 				drawChart();			
 	
@@ -454,10 +456,10 @@ function pre_modTask()
 	if (parseDate(start)>parseDate(end)) 
 	{
 		alert("Start Date cannot be later than End Date");
-//todo:close  modform and open new one openmodfrom()
+		//todo:close  modform and open new one openmodfrom()
 		return;
 	}
-//if start or end date is outside current dayrange
+	//if start or end date is outside current dayrange
 	if (parseDate(start)< DAYRANGE[0] || parseDate(start)> DAYRANGE[DAYRANGE.length-1] || parseDate(end)> DAYRANGE[DAYRANGE.length-1] || parseDate(end)< DAYRANGE[0])
 	{
 	//addExtTask gets new dayrange,and calls addTask with applicable parameters
@@ -465,7 +467,7 @@ function pre_modTask()
 
 	return;
 	}
-	//todo - also add if modification shrinks dayrange
+
 	modTask(task,person,start,end);
 
 
@@ -490,11 +492,7 @@ function modTask(t,r,s,e)
 		alert("Start Date cannot be later than End Date");
 		return;
 	}
-	//todo if start or end date is larger than current dayrange you should expand dayrange
-	if (parseDate(start)< DAYRANGE[0] || parseDate(end)> DAYRANGE[DAYRANGE.length-1])
-	{
-	//get from server a new dayrange?
-	}
+
 	var xhr = typeof XMLHttpRequest != 'undefined' ? new XMLHttpRequest() : new ActiveXObject('Microsoft.XMLHTTP');
 	xhr.onreadystatechange=function()
 	{
@@ -506,7 +504,11 @@ function modTask(t,r,s,e)
 			CHART[rowind-1][2]=person;
 			CHART[rowind-1][3]=start;
 			CHART[rowind-1][4]=end;
-			//new dayrange
+			//new dayrange - maybe you should mod this part to only get new one when needed
+			//needs to extend  if (parseDate(start)< DAYRANGE[0] || parseDate(end)> DAYRANGE[DAYRANGE.length-1])
+			//extend already covered in pre_modTask that only leaves shrinked dayrange
+			//needs to shrink when ??? 	must be if the start or end dates are min and/or max ???
+			getDayrange(curChartID);
 			//lets removeupdatebox from modcell after work is done
      		var p=document.getElementById("updatebox").parentElement;
 			p.removeChild(p.childNodes[1]);

@@ -1,11 +1,8 @@
 #SINGLE CHART
 * modTask
-    * recreate modform on errors
-    * code to reduce dayrange if needed
+    * code to shrink dayrange only  if needed??? might actually not be so optimal
 * remTask
-    * add code to only fetch new dayrange from server if dayrange actually changes
-    * code to reduce dayrange if needed
-
+    * code to shrink dayrange only if needed??? might actually not be so optimal
 
 #MULTI USER
 ##ACCOUNT CREATION AND MANAGEMENT
@@ -16,7 +13,6 @@
 * beautified modal alerts instead of confirms alerts etc
 * beautified header1 months,days
 * ?beautified header2, interactive to allow week/month etc views?
-* frozen columns - done
 * frozen columns beautify styling -priority
 * task colors
 * drag-n-drop on tasks?
@@ -27,6 +23,7 @@
     * remove
     * move to functions
 * cut down on repeating code
+* should I do something with synchronous getDayrange function???
 
 
 #SECURITY
